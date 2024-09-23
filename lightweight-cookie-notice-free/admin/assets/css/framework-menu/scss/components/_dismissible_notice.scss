@@ -1,0 +1,46 @@
+.daextlwcnf-admin-body .notice{
+  margin: 0;
+  border-radius: $radius-lg;
+  box-shadow: $elevation-1;
+  border-width: 1px;
+  margin-bottom: 24px;
+  padding: 11px 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.daextlwcnf-admin-body .updated{
+  background-color: $success-100;
+  border-color: $success-200;
+}
+
+.daextlwcnf-admin-body .error{
+  background-color: $error-100;
+  border-color: $error-200;
+}
+
+.daextlwcnf-admin-body .notice p{
+  color: $neutral-branded-700;
+  font-size: $fs-2;
+  line-height: 18px;
+  font-weight: 600;
+  padding: 3px 0;
+  margin: 0;
+}
+
+.daextlwcnf-admin-body .notice-dismiss-button {
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: none;
+  cursor: pointer;
+}
+
+.daextlwcnf-admin-body .notice-dismiss-button svg path{
+  stroke: $neutral-branded-500;
+  stroke-width: 2px;
+}
+
+.daextlwcnf-admin-body .notice-dismiss-button:hover svg path{
+  stroke: $neutral-branded-700;
+}

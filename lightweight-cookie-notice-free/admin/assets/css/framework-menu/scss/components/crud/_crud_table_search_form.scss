@@ -1,0 +1,61 @@
+/*
+Search Form Container Section.
+Style for the search form displayed in CRUD menus.
+*/
+
+.daextlwcnf-crud-table-search-form{
+
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+
+  &__post-search-input{
+    height: 40px;
+    border-radius: $radius-md !important;
+    border: 1px solid $neutral-branded-300 !important;
+    padding: 0 13px !important;
+    box-shadow: $elevation-1 !important;
+    color: $neutral-branded-700 !important;
+    font-size: $fs-2;
+    line-height: 26px !important;
+    font-weight: 400;
+
+    &:focus {
+      outline: $outline;
+    }
+
+    &:disabled {
+      background-color: $neutral-branded-50;
+      //color: lighten($neutral-branded-500, 10%);
+    }
+
+    &::placeholder {
+      //color: $neutral-branded-400;
+    }
+
+  }
+
+}
+
+@media screen and (max-width: 782px){
+
+    .daextlwcnf-crud-table-search-form{
+
+      justify-content: normal;
+
+      &__post-search-input{
+        width: 100%;
+      }
+
+      #daext-search-form{
+        display: flex;
+        gap: 8px;
+        width: 100%;
+      }
+
+    }
+
+}
+
+

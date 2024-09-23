@@ -1,0 +1,322 @@
+/*
+Pro Features Section.
+Styles for the section used to display the pro features of the plugin.
+*/
+
+.daextlwcnf-pro-features{
+
+  display: flex;
+  flex-direction: column;
+  background: $primary-branded-500;
+  border-radius: $radius-md;
+  margin-top: 24px;
+
+  &__right{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 416px;
+  }
+
+  &__wrapper{
+    margin: 0 82.5px;
+    align-items: center;
+    display: flex;
+    gap: 96px;
+    max-width: 952px;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+
+  &__left{
+    width: 416px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__single-feature{
+    width: 128px;
+    background: rgba($neutral-grey-0, 0.08);
+    box-shadow: 0px 0px 4px rgba($neutral-grey-700, 0.04), 0px 8px 16px rgba($neutral-grey-700, 0.08), inset 0 0 0 1px rgba($neutral-grey-0, 0.08);
+    height: 124px;
+    border-radius: $radius-md;
+  }
+
+  &__single-feature .untitled-ui-icon{
+    width: 20px;
+    height: 20px;
+    margin: 2px 0 6px;
+  }
+
+  &__single-feature .untitled-ui-icon path{
+    stroke: $neutral-branded-200;
+    opacity: 0.8;
+  }
+
+  &__single-feature-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  &__single-feature-name{
+    color: $neutral-grey-0;
+    font-size: $fs-2;
+    line-height: 18px;
+    font-weight: 300;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  &__title{
+    font-size: $fs-7;
+    line-height: 32px;
+    color: $neutral-branded-50;
+    font-weight: 600;
+    width: 416px;
+  }
+
+  &__title-text{
+    font-size: $fs-7;
+    line-height: 32px;
+    color: $neutral-branded-50;
+    font-weight: 600;
+    width: 416px;
+    display: inline;
+  }
+
+  &__pro-badge{
+    border-radius: 18px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
+    background-size: 140% 20%;
+    background-position: 100% 0;
+    font-size: $fs-0;
+    height: 22px;
+    line-height: 22px;
+    margin-left: 2px;
+    padding: 0 6px;
+    display: inline-flex;
+    box-shadow: inset 0 0 0 1px rgba($neutral-grey-0, 0.16);
+    transform: translateY(-4px);
+  }
+
+  &__description{
+    font-size: $fs-4;
+    line-height: 23px;
+    color: $neutral-branded-300;
+    margin: 8px 0 24px;
+    font-weight: 300;
+  }
+
+  &__button-1,
+  &__button-2{
+    padding: 8px 28px;
+    height: 32px;
+    line-height: 32px;
+    color: $neutral-grey-0;
+    background: rgba($neutral-grey-0, 0.1);
+    box-shadow: 0px 0px 4px rgba($neutral-grey-700, 0.04), 0px 4px 8px rgba($neutral-grey-700, 0.06), inset 0 0 0 1px rgba($neutral-grey-0, 0.16);
+    display: flex;
+    gap: 12px;
+    cursor: pointer;
+    border-radius: $radius-md;
+    text-decoration: none;
+  }
+
+  &__button-2{
+    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
+  }
+
+  &__button-2:hover{
+    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
+    background-size: 160% 80%;
+    background-position: 100% 0;
+    transition: background-position 0.5s;
+  }
+
+  &__button-1 &__button-text,
+  &__button-2 &__button-text
+  &__button-1:hover &__button-text,
+  &__button-2:hover &__button-text{
+    color: $neutral-grey-0 !important;
+  }
+
+  &__buttons-container{
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  &__buttons-container .untitled-ui-icon{
+    width: 20px;
+    height: 20px;
+    margin: 6px 0;
+  }
+
+  &__buttons-container .untitled-ui-icon path{
+    stroke: $neutral-branded-150;
+    opacity: 0.5;
+  }
+
+  &__footer-wrapper{
+    background: rgba(16, 24, 40, 0.4);
+    padding: 0 32px;
+    border-radius: 0 0 6px 6px;
+  }
+
+  &__footer-wrapper-inner{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 48px;
+    align-items: center;
+    max-width: 928px;
+    margin: 0 auto;
+  }
+
+  &__footer-wrapper-left{
+    font-size: $fs-2;
+    line-height: 18px;
+    color: $neutral-branded-400;
+    text-align: left;
+  }
+
+  &__footer-wrapper-right{
+    font-size: $fs-2;
+    line-height: 18px;
+    color: $neutral-branded-400;
+    display: flex;
+    gap: 4px;
+    height: 18px;
+    text-decoration: none;
+  }
+
+  &__footer-wrapper-right:hover{
+    color: $neutral-branded-300;
+  }
+
+  &__footer-wrapper-right .untitled-ui-icon{
+    width: 18px;
+    height: 18px;
+    margin: 0;
+  }
+
+  &__footer-wrapper-right .untitled-ui-icon path{
+    stroke: $neutral-branded-150;
+    opacity: 0.5;
+  }
+
+  &__footer-wrapper-right:hover .untitled-ui-icon path{
+    opacity: 0.7;
+  }
+
+}
+
+@media screen and (max-width: 1235px){
+
+  .daextlwcnf-pro-features{
+
+    &__right{
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    &__single-feature{
+      height: 40px;
+      width: 200px;
+    }
+
+    &__single-feature-wrapper{
+        flex-direction: row;
+        gap: 8px;
+        justify-content: flex-start;
+    }
+
+    &__single-feature .untitled-ui-icon{
+      margin-left: 16px;
+    }
+
+    &__single-feature-name{
+      margin-top: 0;
+    }
+
+    &__single-feature-name br{
+      display: none;
+    }
+
+    &__single-feature .untitled-ui-icon{
+      margin: 0 0 0 16px;
+    }
+
+    &__wrapper{
+      gap: 48px;
+    }
+
+  }
+
+}
+
+@media screen and (max-width: 970px){
+
+  .daextlwcnf-pro-features{
+
+    &__right{
+      display: none;
+    }
+
+    &__footer-wrapper-right{
+      display: none;
+    }
+
+    &__footer-wrapper-left{
+      width: 100%;
+    }
+
+  }
+
+  @media screen and (max-width: 600px) {
+
+    .daextlwcnf-pro-features {
+
+      &__wrapper{
+        height: auto;
+        padding-top: 32px;
+        padding-bottom: 32px;
+      }
+
+      &__left{
+        width: auto;
+      }
+
+      &__title{
+        width: auto;
+      }
+
+      &__buttons-container {
+        flex-direction: column;
+      }
+
+      &__button-1,
+      &__button-2{
+        justify-content: center;
+      }
+
+      &__footer-wrapper-inner{
+        height: auto;
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+
+    }
+
+  }
+
+}

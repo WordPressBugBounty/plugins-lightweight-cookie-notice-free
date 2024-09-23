@@ -1,0 +1,60 @@
+/* Preloader page - Start ----------------------------------------------------------- */
+
+/* Inspired by: https://codepen.io/MBouwman/pen/JmwPaM */
+
+.loading-screen{
+
+	min-height: 1200px;
+	margin: 0 20px;
+
+	&__wrapper{
+		position: absolute;
+		top: 25%;
+		margin: 0 auto;
+		width: calc(100% - 40px);
+	}
+
+	&__content{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+	}
+
+	&__spinner-container{
+		width: 20px;
+		height: 20px;
+		position: relative;
+	}
+
+	&__spinner{
+		width: 20px;
+		height: 20px;
+
+		border: 2px solid $neutral-grey-300;
+		border-top: 2px solid $primary-wordpress-100;
+		border-radius: 100%;
+
+		position: absolute;
+		top:0;
+		bottom:0;
+		left:0;
+		right: 0;
+		margin: auto;
+
+		animation: spin 1s infinite linear;
+	}
+
+	&__text{
+		color: $neutral-branded-700;
+	}
+
+}
+
+@keyframes spin {
+	from{
+		transform: rotate(0deg);
+	}to{
+		transform: rotate(360deg);
+	}
+}

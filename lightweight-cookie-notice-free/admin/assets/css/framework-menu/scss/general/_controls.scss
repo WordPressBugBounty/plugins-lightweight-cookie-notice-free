@@ -1,0 +1,355 @@
+
+/* UI Elements - Start -------------------------------------------------------------------- */
+
+.daextlwcnf-button{
+  background: $primary-wordpress-100;
+  color: $neutral-grey-0;
+  height: 22px;
+  line-height: 22px;
+  padding: 4px 12px;
+  border: 1px solid rgba($neutral-branded-800, 0.2);
+  font-size: $fs-2;
+  border-radius: $radius-md;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  transition-property: background, border, box-shadow;
+}
+
+.daextlwcnf-button:hover{
+  background: $primary-wordpress-500;
+  color: $neutral-grey-0;
+}
+
+.daextlwcnf-admin-page-button{
+
+  height: 40px;
+  padding: 0 16px !important;
+  border-radius: $radius-md !important;
+
+  &:hover {
+    //background-color: lighten($primary-50, 2%);
+    border-color: $primary-wordpress;
+    color: $primary-wordpress;
+  }
+  &:focus {
+    //background-color: lighten($primary-50, 2%);
+    outline: $outline;
+    color: $primary-wordpress;
+  }
+
+}
+
+/* Style for primary and secondary buttons - Start -------------------------------------------------------- */
+
+.daextlwcnf-btn{
+  border-width: 1px;
+  border-style: solid;
+  line-height: 22px;
+  padding: 8px 16px;
+  font-size: $fs-2;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  transition-property: background, border, box-shadow;
+  margin: 0;
+}
+
+.daextlwcnf-btn:hover{
+  cursor: pointer;
+}
+
+.daextlwcnf-btn-primary{
+  background: $primary-wordpress-100;
+  color: $neutral-grey-0;
+  border-color: rgba($neutral-branded-800, 0.2);
+}
+
+.daextlwcnf-btn-primary:hover{
+  background: $primary-wordpress-500;
+  color: $neutral-grey-0;
+}
+
+.daextlwcnf-btn-secondary{
+  background: transparent;
+  color: $primary-wordpress-100 !important;
+  border-color: $primary-wordpress-100;
+}
+
+.daextlwcnf-btn-secondary:hover{
+  background-color: $neutral-branded-100;
+}
+
+.daextlwcnf-btn:disabled{
+  background-color: $neutral-branded-150;
+  border-color: $neutral-branded-200;
+  color: $neutral-branded-400 !important;
+  transition: none;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+/* Style for primary and secondary buttons - End -------------------------------------------------------- */
+
+/*
+
+Style for input type="file" button - Start --------------------------------------------------------
+
+Ref:
+
+- https://stackoverflow.com/questions/572768/styling-an-input-type-file-button
+- https://stackoverflow.com/questions/2189615/how-to-get-file-name-when-user-select-a-file-via-input-type-file
+
+*/
+
+.daextlwcnf-input-wrapper{
+  padding-top: 16px;
+  padding-right: 16px;
+  padding-bottom: 16px;
+  padding-left: 16px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: $neutral-branded-300;
+  border-radius: 6px;
+  display: flex;
+  gap: 16px;
+}
+
+.daextlwcnf-upload-submit-container{
+  margin: 24px 0;
+}
+
+.custom-file-upload-input {
+  display: none;
+}
+
+.custom-file-upload {
+  border-width: 1px;
+  border-style: solid;
+  line-height: 22px;
+  padding: 8px 16px;
+  font-size: $fs-2;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  transition-property: background, border, box-shadow;
+  background: transparent;
+  color: $primary-wordpress-100 !important;
+  border-color: $primary-wordpress-100;
+  cursor: pointer;
+}
+
+.custom-file-upload-text{
+  font-size: 14px;
+  line-height: 20px;
+  padding: 10px 0;
+}
+
+/* Style for input type="file" button - End --------------------------------------------- */
+
+/* UI Elements - End -------------------------------------------------------------------- */
+
+
+/* Select Element Style - Start ----------------------------------------------------------------- */
+
+select{
+  height: 40px;
+  border-radius: $radius-md !important;
+  background-color: $neutral-grey-0 !important;
+  border-color: $neutral-branded-300 !important;
+  box-shadow: $elevation-1 !important;
+  color: $neutral-branded-700 !important;
+}
+
+/* Select Element Style - End ----------------------------------------------------------------- */
+
+
+
+/* Toggle Switch - Start ----------------------------------------------------------------- */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $neutral-grey-500;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 2px;
+  background-color: $neutral-grey-0;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: $primary-wordpress-100;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px $primary-branded-100;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(18px);
+  -ms-transform: translateX(18px);
+  transform: translateX(18px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 12px;
+  width: 42px;
+  height: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* Toggle Switch - End ----------------------------------------------------------------- */
+
+
+
+/* Toggle Switch container - Start ----------------------------------------------------------------- */
+
+.switch-container{
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-content: center;
+}
+
+.switch-left{
+  height: 24px;
+}
+
+.switch-right label{
+  margin: 0 !important;
+  height: 24px;
+  line-height: 24px !important;
+}
+
+p.description{
+  margin: 6px 0 0;
+  line-height: 18px;
+  max-width: 574px;
+  font-size: $fs-1;
+}
+
+/* Toggle Switch container - End ----------------------------------------------------------------- */
+
+/* Pills - Start ----------------------------------------------------------------- */
+
+.daextlwcnf-pills{
+  border-radius: 4px;
+}
+
+.daextlwcnf-pill{
+  border: 1px solid $neutral-branded-300;
+  cursor: pointer;
+  height: 26px;
+  padding: 6px 16px;
+  background: $neutral-grey-0;
+  box-sizing: content-box;
+  color: $neutral-branded-600;
+  box-shadow: 0px 1px 2px rgba($neutral-branded-800, 0.1);
+}
+
+.daextlwcnf-pill:first-child{
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.daextlwcnf-pill:first-child:dir(rtl){
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.daextlwcnf-pill:last-child{
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.daextlwcnf-pill:last-child:dir(rtl){
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.daextlwcnf-pill:not(:first-child){
+  border-left: none;
+}
+
+.daextlwcnf-pill:dir(rtl):not(:first-child){
+  border-left: 1px solid $neutral-branded-300;
+  border-right: none;
+}
+
+.daextlwcnf-pill[data-checked="true"]{
+  background: $neutral-branded-50;
+  color: $primary-wordpress-100;
+}
+
+/* Pills - End ----------------------------------------------------------------- */
+
+/* Input Range - Start ----------------------------------------------------------------- */
+
+.daextlwcnf-main-form__daext-form-field input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: $neutral-grey-400;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+  margin-top: 18px;
+  border-radius: 2px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  background: $primary-wordpress-100;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: $primary-wordpress-100;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+/* Input Range - End ----------------------------------------------------------------- */
+
+

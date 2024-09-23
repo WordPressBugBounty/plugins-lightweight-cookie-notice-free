@@ -1,0 +1,139 @@
+/*
+This section is positioned below the table used to list items in the crud pages. It contains the form to perform bulk
+actions and the pagination.
+*/
+
+.daextlwcnf-crud-table-controls{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+
+    &__daext-tablenav > a{
+        font-size: $fs-5 !important;
+        text-decoration: none;
+        text-align: center;
+        width: 24px;
+        padding: 7px 7px;
+        border: 1px solid rgb(220, 220, 222);
+        border-radius: $radius-md;
+        display: flex;
+    }
+
+    &__daext-tablenav > a > svg{
+        min-width: 24px;
+        min-height: 24px;
+    }
+
+    &__daext-tablenav > a > svg:dir(rtl){
+        transform: rotate(180deg);
+    }
+
+    &__daext-tablenav > a svg path{
+        stroke: $primary-wordpress-400;
+    }
+
+    &__daext-tablenav > a:hover svg path{
+        stroke: $neutral-grey-0;
+    }
+
+    &__daext-tablenav > a.disabled svg path{
+        stroke: $neutral-grey-500;
+    }
+
+    &__daext-tablenav > a:nth-of-type(2),
+    &__daext-tablenav > a:nth-of-type(4){
+        margin-left: 4px !important;
+    }
+
+    &__daext-tablenav > a:dir(rtl):nth-of-type(2),
+    &__daext-tablenav > a:dir(rtl):nth-of-type(4){
+        margin-right: 4px !important;
+        margin-left: 0 !important;
+    }
+
+    &__daext-tablenav > a:not(.disabled){
+        border-color: $primary-wordpress-400;
+    }
+
+    &__daext-tablenav > a:not(.disabled):hover{
+        color: $neutral-grey-0 !important;
+        background: $primary-wordpress-300;
+    }
+
+    &__daext-tablenav > .disabled{
+        cursor: default;
+        color: $neutral-grey-500 !important;
+    }
+
+    &__daext-tablenav{
+        display: flex;
+        align-items: center;
+    }
+
+    &__daext-tablenav &__daext-displaying-num{
+        margin-right: 2px;
+        color: $neutral-branded-500;
+        font-size: $fs-2;
+        line-height: 18px;
+        font-weight: 400;
+        margin-right: 16px;
+    }
+
+    &__daext-tablenav &__daext-displaying-num:dir(rtl){
+        margin-left: 16px;
+        margin-right: 0;
+    }
+
+    &__pagination-paging-text{
+        color: $neutral-branded-500;
+        margin: 0 8px;
+        display: block;
+    }
+
+    &__daextlwcnf-pagination-container{
+        height: 40px;
+    }
+
+}
+
+@media screen and (max-width: 960px){
+
+    .daextlwcnf-crud-table-controls{
+
+        flex-direction: column;
+        gap: 40px;
+        position: relative;
+
+        &__bulk-actions{
+            width: 100%;
+        }
+
+        &__pagination-container{
+            width: 100%;
+        }
+
+        &__daext-displaying-num{
+            position: absolute;
+            top: 11px;
+            right: 0;
+        }
+
+        &__daext-displaying-num:dir(rtl){
+            left: 0;
+            right: auto;
+        }
+
+        &__daext-tablenav &__daext-displaying-num{
+            margin-right: 0;
+        }
+
+        &__daext-tablenav &__daext-displaying-num:dir(rtl) {
+            margin-left: 0;
+        }
+
+    }
+
+}

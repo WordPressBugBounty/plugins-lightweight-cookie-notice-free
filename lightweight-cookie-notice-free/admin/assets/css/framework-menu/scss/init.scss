@@ -1,0 +1,23 @@
+/* SCSS Bootstrap File */
+
+/* General */
+@import "general/variables.scss";
+@import "general/reset.scss";
+@import "general/controls";
+
+/* Components */
+@import "components/admin_toolbar";
+@import "components/header_bar";
+@import "components/crud/crud_table_search_form";
+@import "components/crud/crud_table";
+@import "components/crud/crud_table_controls";
+@import "components/pro_features";
+@import "components/main_form";
+@import "components/react/react_table";
+@import "components/dismissible_notice";
+@import "components/loading_screen";
+@import "components/menu_options";
+@import "components/select2_custom";
+@import "components/jquery-ui-dialog-custom";
+@import "components/menu-specific/menu_consent_log";
+@import "components/menu-specific/menu_tools";

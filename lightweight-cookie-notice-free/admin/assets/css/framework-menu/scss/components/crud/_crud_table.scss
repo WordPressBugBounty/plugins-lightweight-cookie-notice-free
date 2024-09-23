@@ -1,0 +1,221 @@
+/*
+The .daextlwcnf-crud-table class is used to style the table that displays the items in the CRUD pages.
+*/
+
+
+.daextlwcnf-crud-table{
+
+  border: none;
+
+  &__daext-items{
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: $elevation-1;
+    border-radius: $radius-lg;
+  }
+
+  &__daext-items > thead,
+  &__daext-items > tfoot{
+    background: $neutral-branded-50;
+  }
+
+  &__daext-items > tbody > tr{
+    background: $neutral-grey-100 !important;
+  }
+
+  &__daext-items > thead > tr > th{
+    border-bottom: 1px solid $neutral-branded-200;
+  }
+
+  &__daext-items > thead > tr > th,
+  &__daext-items > tfoot > tr > th{
+    padding: 0;
+    height: 47px;
+    font-size: $fs-1;
+    color: $neutral-grey-600;
+    font-weight: 600;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    padding: 0 24px;
+    text-align: left;
+    text-shadow: $neutral-grey-0 0px 1px 0px;
+
+    font-size: $fs-3;
+    line-height: 20px;
+    font-weight: 500;
+    color: $neutral-branded-700;
+  }
+
+  &__daext-items > thead > tr > th:dir(rtl){
+    text-align: right;
+  }
+
+  &__daext-items > thead > tr > th:first-child{
+    border-radius: $radius-md 0 0 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 16px;
+  }
+
+  &__daext-items > thead > tr > th:last-child{
+    border-radius: 0 $radius-md 0 0;
+  }
+
+  &__daext-items > tfoot > tr > th:first-child{
+    border-radius: 0 0 0 $radius-md;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 16px;
+  }
+
+  &__daext-items > tfoot > tr > th:last-child{
+    border-radius: 0 0 $radius-md 0;
+  }
+
+  &__daext-items > tbody > tr > td{
+    height: 39px;
+    font-size: $fs-2;
+    line-height: 20px;
+    color: $neutral-branded-700;
+    font-weight: normal;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    padding: 10px 24px;
+    vertical-align: top;
+  }
+
+  &__daext-items > tbody > tr > td:first-child{
+    width: 16px;
+    padding: 10px 16px 10px 16px;
+  }
+
+  table.daext-items > thead > tr > th:first-child,
+  table.daext-items > tfoot > tr > th:first-child{
+    width: 16px;
+    padding-left: 16px;
+    padding-right: 0;
+  }
+
+  &__daext-items .shortcode{
+    font-size: $fs-0 !important;
+    font-family: monospace !important;
+    color: $neutral-grey-0;
+    padding: 3px;
+    background: $primary-wordpress-200;
+  }
+
+  &__daext-items > tbody > tr > td{
+    border-bottom: 1px solid $neutral-branded-200;
+    background: $neutral-grey-0;
+  }
+
+  &__daext-items > tbody > tr:hover > td{
+    background: $neutral-branded-50;
+  }
+
+  &__daext-items > tbody > tr > td > a{
+    text-decoration: none;
+  }
+
+  &__daext-items .menu-icon{
+    width: 20px !important;
+    height: 20px !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    float: left !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  &__daext-items .menu-icon.empty-icon{
+    cursor: default !important;
+  }
+
+  &__daext-items .icons-container .menu-icon:not(:last-child){
+    margin-right: 8px !important;
+  }
+
+  &__row-actions-single-action button{
+    background: none;
+    text-decoration: none;
+    color: $primary-wordpress-100;
+    border: none;
+    height: 15px;
+    line-height: 15px;
+    padding: 0;
+  }
+
+  &__row-actions-single-action button:hover{
+      color: $primary-wordpress-600;
+      cursor: pointer;
+  }
+
+  &__daext-items input[type="checkbox"]{
+    border: 1px solid $neutral-grey-300;
+    box-shadow: none;
+    margin: 0 1px;
+    display: block;
+  }
+
+  &__daext-items .clone {
+    margin-right: 8px !important;
+    margin-top: 4px !important;
+    margin-bottom: 4px !important;
+  }
+
+  &__item-name{
+    font-weight: 500;
+    color: $primary-wordpress-100;
+  }
+
+  &__row-actions{
+    display: flex;
+    visibility: hidden;
+  }
+
+  &__daext-items tbody tr:hover &__row-actions{
+    visibility: visible;
+  }
+
+  &__row-actions a{
+    text-decoration: none;
+    color: $primary-wordpress-100;
+  }
+
+  &__no-items-found-message{
+    padding: 0 0 24px 0;
+    font-size: $fs-2;
+    color: $neutral-branded-700;
+  }
+
+}
+
+@media screen and (max-width: 782px){
+
+  .daextlwcnf-crud-table{
+
+    &__daext-items tr > th,
+    &__daext-items tr > td{
+      display: none;
+    }
+
+    &__daext-items tr > th:nth-of-type(1),
+    &__daext-items tr > th:nth-of-type(2),
+    &__daext-items tr > td:nth-of-type(1),
+    &__daext-items tr > td:nth-of-type(2){
+      display: table-cell;
+    }
+
+    &__daext-items > thead > tr > th:nth-of-type(2){
+      border-radius: 0 6px 0 0;
+    }
+
+    &__daext-items > tfoot > tr > th:nth-of-type(2){
+      border-radius: 0 0 6px 0;
+    }
+
+  }
+
+}

@@ -1,0 +1,593 @@
+/*
+This file is used to style the section that includes the table used to list items in the menus powered by React:
+
+- Dashboard
+- Link Juice
+- HTTP Status
+- Hits
+
+Note that this section is composed by the following sub-sections:
+
+- Statistics and Tools
+- Filters
+- Table
+- Pagination
+ */
+
+.daextlwcnf-react-table{
+
+  display: flex;
+  flex-direction: column;
+  border: 1px solid $neutral-grey-200;
+  background: #fff;
+  border-radius: $radius-lg;
+
+  /* Statistics and Tools section - Start --------------------------------------- */
+
+  &__daextlwcnf-filters{
+    display: flex;
+    align-items: center;
+    padding: 24px;
+    gap: 24px;
+    justify-content: space-between;
+  }
+
+  &__daextlwcnf-filters .daextlwcnf-search-container{
+    display: flex;
+    gap: 8px;
+  }
+
+  &__daextlwcnf-filters .daextlwcnf-search-container input:first-of-type{
+    min-width: 280px;
+    box-sizing: border-box;
+    height: 40px;
+    padding-right: 12px;
+    padding-left: 12px;
+    font-size: $fs-2;
+    background-color: $neutral-grey-0;
+    border-color: $neutral-branded-300;
+    box-shadow: $elevation-1;
+    border-radius: $radius-md;
+    color: $neutral-branded-700;
+    margin: 0;
+  }
+
+  & .daextlwcnf-react-table-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid $neutral-grey-200;
+  }
+
+  & .daextlwcnf-react-table-header .tools-actions{
+    display: flex;
+    gap: 8px;
+  }
+
+  & .daextlwcnf-react-table-header .statistics{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    line-height: 40px;
+  }
+
+  & .daextlwcnf-react-table-header .statistics .statistic-value{
+    font-weight: 600;
+  }
+
+  & .daextlwcnf-react-table-header .statistics .statistic-value:not(:last-of-type){
+    margin-right: 8px;
+  }
+
+  & .daextlwcnf-react-table-header .tools-actions button{
+    border: 1px solid $neutral-branded-300;
+    cursor: pointer;
+    height: 26px;
+    padding: 6px 16px;
+    background: $neutral-grey-0;
+    box-sizing: content-box;
+    color: $neutral-branded-600;
+    box-shadow: $elevation-1;
+    border-radius: $radius-sm;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  & .daextlwcnf-react-table-header .tools-actions button[disabled]{
+    background-color: $neutral-branded-150;
+    border-color: $neutral-branded-200;
+    color: $neutral-branded-400 !important;
+    transition: none;
+    pointer-events: none;
+    box-shadow: none;
+  }
+
+  & .daextlwcnf-react-table-header .tools-actions button:hover{
+    background: $neutral-branded-100;
+  }
+
+  & .daextlwcnf-react-table-header .tools-actions button .button-icon {
+    width: 20px;
+    height: 20px;
+    margin: 2px 0;
+    background-size: cover; /* or contain */
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* Statistics and Tools section - End ----------------------------------------- */
+
+  /* Data Table - Start --------------------------------------------------------- */
+
+  .daextlwcnf-data-table-container{
+    overflow-x: auto;
+  }
+
+  &__daextlwcnf-data-table{
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  &__daextlwcnf-data-table th,
+  &__daextlwcnf-data-table td{
+    padding: 12px;
+    border: 1px solid $neutral-grey-200;
+  }
+
+  &__daextlwcnf-data-table tr th{
+    background: $neutral-branded-50;
+
+  }
+
+  &__daextlwcnf-data-table tr th button,
+  &__daextlwcnf-data-table tr th div{
+    color: $neutral-branded-700;
+    font-weight: 400;
+    font-size: $fs-1;
+  }
+
+  &__daextlwcnf-data-table tr th{
+    padding: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    height: 40px;
+  }
+
+  &__daextlwcnf-data-table &__post-cell-container{
+    display: flex;
+    gap: 4px;
+  }
+
+  &__daextlwcnf-data-table &__post-cell-container a{
+    text-decoration: none;
+  }
+
+  &__icon-link:focus:nth-of-type(2){
+    box-shadow: none !important
+  }
+
+  &__daextlwcnf-data-table td:hover &__icon-link{
+    visibility: visible;
+  }
+
+  &__icon-link{
+    visibility: hidden;
+  }
+
+  &__icon-link:before{
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin: 2px 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  &__icon-link:nth-of-type(2):before{
+    background: url("../../img/icons/share-03.svg") 0 0 no-repeat !important;
+  }
+
+  &__icon-link:nth-of-type(3):before{
+    background: url("../../img/icons/edit-03.svg") 0 0 no-repeat !important;
+  }
+
+  &__daextlwcnf-data-table tr th:not(:first-of-type){
+    border-left: 1px solid $neutral-grey-200;
+  }
+
+  &__daextlwcnf-data-table tr th:dir(rtl):not(:first-of-type){
+    border-right: 1px solid $neutral-grey-200;
+    border-left: none;
+  }
+
+  &__daextlwcnf-data-table tr th:not(:last-of-type){
+    border-right: 1px solid $neutral-grey-200;
+  }
+
+  &__daextlwcnf-data-table tr th:dir(rtl):not(:last-of-type){
+    border-left: 1px solid $neutral-grey-200;
+    border-right: none;
+  }
+
+  &__daextlwcnf-data-table tr th button{
+    border-left-width: 0;
+    border-right-width: 0;
+    padding-left: 8px;
+    height: 40px;
+    display: flex;
+    box-sizing: border-box;
+    padding-right: 8px;
+    line-height: 24px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 100%;
+    text-align: left;
+    gap: 8px;
+    justify-content: space-between;
+    white-space: nowrap;
+  }
+
+  &__daextlwcnf-data-table tr th button:dir(rtl){
+    text-align: right;
+  }
+
+  &__daextlwcnf-table-head-label{
+    border-left-width: 0;
+    border-right-width: 0;
+    padding-left: 8px;
+    height: 40px;
+    display: flex;
+    box-sizing: border-box;
+    padding-right: 8px;
+    line-height: 24px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 100%;
+    text-align: left;
+    gap: 8px;
+    justify-content: space-between;
+    white-space: nowrap;
+  }
+
+  &__daextlwcnf-table-head-label:dir(rtl){
+    text-align: right;
+  }
+
+  &.url-details-view &__daextlwcnf-data-table tr th{
+    border-left-width: 0;
+    border-right-width: 0;
+    padding-left: 8px;
+    height: 40px;
+    box-sizing: border-box;
+    padding-right: 8px;
+    line-height: 24px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 100%;
+    text-align: left;
+    gap: 8px;
+    justify-content: space-between;
+    white-space: nowrap;
+    color: $neutral-branded-700;
+    font-weight: 400;
+    font-size: $fs-1;
+  }
+
+  &.url-details-view &__daextlwcnf-data-table tr th:dir(rtl){
+    text-align: right;
+  }
+
+  &.url-details-view &__daextlwcnf-data-table tr th:first-of-type {
+    padding-left: 32px !important;
+  }
+
+  &__daextlwcnf-data-table tr th button[data-icon="asc"],
+  &__daextlwcnf-data-table tr th button[data-icon="desc"]{
+    background: $neutral-branded-200;
+  }
+
+  &__daextlwcnf-data-table tr td{
+    border-left-width: 0;
+    border-right-width: 0;
+    padding-left: 8px;
+    padding-right: 8px;
+    line-height: 18px;
+    padding-top: 10.5px;
+    padding-bottom: 10.5px;
+  }
+
+  &__daextlwcnf-data-table tr th:first-of-type{
+    padding-left: 24px;
+  }
+
+  &__daextlwcnf-data-table tr th:first-of-type:dir(rtl){
+    padding-left: 0;
+    padding-right: 24px;
+  }
+
+  &__daextlwcnf-data-table tr td:first-of-type{
+    padding-left: 32px;
+  }
+
+  &__daextlwcnf-data-table tr td:first-of-type:dir(rtl){
+    padding-right: 32px;
+    padding-left: 0;
+  }
+
+  &__daextlwcnf-data-table tr th:last-of-type{
+    padding-right: 24px;
+  }
+
+  &__daextlwcnf-data-table tr th:last-of-type:dir(rtl){
+    padding-right: 0;
+    padding-left: 24px;
+  }
+
+  &__daextlwcnf-data-table tr td:last-of-type{
+    padding-right: 32px;
+  }
+
+  &__daextlwcnf-data-table tr td:last-of-type:dir(rtl){
+    padding-left: 32px;
+    padding-right: 0;
+  }
+
+  &__daextlwcnf-sorting-button{
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  &__daextlwcnf-sorting-button:hover{
+    background: $neutral-branded-200;
+  }
+
+  &__daextlwcnf-sorting-button[data-icon=asc]::after {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 24px;
+    background: url("../../img/icons/order-asc.svg") 0 0 no-repeat !important;
+  }
+
+  &__daextlwcnf-sorting-button[data-icon=desc]::after {
+    content: "";
+    display: block;
+    width: 24px;
+    height: 24px;
+    background: url("../../img/icons/order-desc.svg") 0 0 no-repeat !important;
+  }
+
+  &__daextlwcnf-data-table .button-actions-container{
+    display: flex;
+    gap: 8px;
+  }
+
+  &__daextlwcnf-data-table .small-button{
+    height: 26px;
+    padding: 3px 8px;
+    background: $primary-branded-300;
+    border-radius: $radius-sm;
+    font-size: $fs-3;
+    line-height: 20px;
+    color: $neutral-grey-0;
+    font-weight: 500;
+    border: none;
+    width: max-content;
+    cursor: pointer;
+  }
+
+  &__daextlwcnf-data-table .small-button:hover{
+    background: $primary-branded-400;
+  }
+
+  &__http-status-pill{
+    padding: 3px 8px;
+    border-radius: 4px;
+    color: $neutral-grey-0;
+    display: inline-block;
+  }
+
+  &__http-status-color-group-1xx-informational-responses,
+  &__http-status-color-group-3xx-redirection-messages,
+  &__http-status-color-group-unknown{
+    background: #787878;
+  }
+
+  &__http-status-color-group-2xx-successful-responses,
+  &__http-status-color-group-5xx-server-error-responses{
+    background: #418548;
+  }
+
+  &__http-status-color-group-4xx-client-error-responses{
+    background: #d94838;
+  }
+
+  & .juice-relative-wrapper{
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+    width: fit-content;
+  }
+
+  & .juice-relative-container{
+    height: 16px;
+    background: $neutral-branded-300;
+    width: 160px;
+  }
+
+  & .juice-relative{
+    background: $primary-branded-200;
+    height: 16px;
+  }
+
+  & th:nth-of-type(3),
+  & td:nth-of-type(3){
+
+  }
+
+  &.url-details-view .daextlwcnf-react-table-header{
+    border-bottom: none;
+  }
+
+  & .daextlwcnf-no-data-found{
+    padding: 19px 24px;
+    text-align: left;
+    font-size: $fs-2;
+    color: $neutral-branded-600;
+  }
+
+  /* Data Table - End --------------------------------------------------------- */
+
+  /* Pagination - Start --------------------------------------------------------- */
+
+  &__pagination-container{
+    display: flex;
+    justify-content: end;
+    padding: 0 24px;
+    align-items: center;
+    gap: 16px;
+    height: 88px;
+  }
+
+  &__pagination-container .pagination-container{
+    display: flex;
+    border-radius: $radius-sm;
+    margin: 24px 0;
+  }
+
+  &__pagination-container .pagination-item{
+    border: 1px solid $neutral-branded-300;
+    cursor: pointer;
+    height: 24px;
+    line-height: 24px;
+    padding: 7px;
+    background: $neutral-grey-0;
+    box-sizing: content-box;
+    color: $neutral-branded-600;
+    margin: 0;
+    text-align: center;
+    width: 24px;
+  }
+
+  &__pagination-container .pagination-item.selected{
+    background: $neutral-branded-50;
+    color: $primary-wordpress-100;
+  }
+
+  &__pagination-container .pagination-item:first-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  &__pagination-container .pagination-item:dir(rtl):first-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  &__pagination-container .pagination-item:last-child {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  &__pagination-container .pagination-item:dir(rtl):last-child {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &__pagination-container .pagination-item:not(:first-child){
+    border-left: none;
+  }
+
+  &__pagination-container .pagination-item:dir(rtl):not(:first-child){
+    border-right: none;
+    border-left: 1px solid $neutral-branded-300;
+  }
+
+  &__pagination-container .arrow.left,
+  &__pagination-container .arrow.right{
+    position: initial;
+    margin: 0;
+    width: 24px;
+    height: 24px;
+  }
+
+  &__pagination-container .arrow.left::after,
+  &__pagination-container .arrow.right::after{
+    content: "";
+    display: block;
+    width: 24px;
+    height: 24px;
+    transform: none;
+    position: initial;
+  }
+
+  &__pagination-container .pagination-item svg:dir(rtl){
+    transform: rotate(180deg);
+  }
+
+  &__pagination-container .pagination-item svg path{
+    stroke: $primary-wordpress-400;
+  }
+
+  &__pagination-container .pagination-item.disabled svg path{
+    stroke: $neutral-grey-500;
+  }
+
+  /* Pagination - End --------------------------------------------------------- */
+
+
+  /* Juice Details section - Start ------------------------------------------------------------------------------ */
+
+  & .daextlwcnf-back-button{
+    cursor: pointer;
+  }
+
+  & .daextlwcnf-back-button:hover{
+
+  }
+
+  /* Juice Details section - End ------------------------------------------------------------------------------ */
+
+
+}
+
+@media screen and (max-width: 960px){
+
+  .daextlwcnf-react-table {
+
+    & .daextlwcnf-react-table-header .statistics {
+      display: none;
+    }
+
+    &__daextlwcnf-filters{
+      flex-direction: column;
+    }
+
+    & .daextlwcnf-pills{
+      width: 100%;
+    }
+
+    &__daextlwcnf-filters .daextlwcnf-search-container{
+      width: 100%;
+    }
+
+    .daext-displaying-num{
+      display: none;
+    }
+
+    &__pagination-container{
+      justify-content: flex-start;
+    }
+
+  }
+
+}

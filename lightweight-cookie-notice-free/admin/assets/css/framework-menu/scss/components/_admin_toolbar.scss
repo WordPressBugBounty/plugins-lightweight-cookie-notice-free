@@ -1,0 +1,269 @@
+/*
+This is the first section on the page and include the plugin, a menu with links to the main plugin admin page, and a
+logo of the DAEXT website.
+*/
+
+.daextlwcnf-admin-toolbar {
+
+  background: $primary-branded-500;
+  color: $neutral-branded-400;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  max-width: 100%;
+  padding: 16px 32px;
+
+  &__menu-items {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  &__menu-item-wrapper{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  &__menu-item .untitled-ui-icon{
+    width: 20px;
+    height: 20px;
+    margin: 2px 0;
+  }
+
+  &__menu-item-more &__menu-item-wrapper svg:last-of-type{
+    width: 16px;
+    height: 16px;
+    margin: 4px 0;
+  }
+
+  &__menu-item.is-active,
+  &__menu-item:hover{
+    color: $neutral-branded-50;
+    background: $neutral-branded-600;
+  }
+
+  &__menu-item .untitled-ui-icon path{
+    stroke: $neutral-branded-400;
+  }
+
+  &__menu-item.is-active .untitled-ui-icon path,
+  &__menu-item:hover .untitled-ui-icon path{
+    stroke: $neutral-branded-50;
+  }
+
+  &__plugin-logo{
+    width: 40px;
+    height: 40px;
+    margin-top: 0;
+    margin-right: 16px;
+  }
+
+  &__plugin-logo:focus{
+    box-shadow: none;
+  }
+
+  &__menu-item{
+    height: 24px;
+    line-height: 24px;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: $radius-md;
+    text-decoration: none;
+    color: $neutral-branded-400;
+
+    &.is-active {
+      background: rgba($neutral-grey-0, 0.1);
+      color: $neutral-grey-0;
+    }
+    &:hover {
+      background: rgba($neutral-grey-0, 0.1);
+      color: $neutral-branded-50;
+    }
+    &:focus-visible {
+      border: {
+        width: 1px;
+        style: solid;
+        //color: $neutral-branded-500;
+      }
+    }
+    &:focus {
+      box-shadow: none;
+    }
+
+  }
+
+  &__right-section{
+    display: flex;
+    gap: 24px;
+  }
+
+  &__upgrade-button{
+    padding: 8px 16px;
+    height: 20px;
+    margin: 2px 0;
+    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
+    border-radius: $radius-md;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    color: $neutral-grey-0;
+    font-size: $fs-2;
+    text-decoration: none;
+    display: flex;
+    gap: 6px;
+  }
+
+  &__upgrade-button:hover{
+    color: $neutral-grey-0;
+    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
+    background-size: 160% 80%;
+    background-position: 100% 0;
+    transition: background-position 0.5s;
+  }
+
+  &__upgrade-button .untitled-ui-icon{
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 1px;
+  }
+
+  &__upgrade-button svg path{
+    stroke: $neutral-grey-0;
+  }
+
+  &__upgrade-button-text{
+    line-height: 20px;
+    height: 20px;
+  }
+
+  &__upgrade-button a{
+
+  }
+
+  &__daext-logo{
+    width: 78px;
+    height: 20px;
+    margin: 10px 0;
+  }
+
+  /* Pop Sub Menu - Start ----------------------------------------------------------------- */
+
+  &__menu-item-more{
+    position: relative;
+    cursor: default;
+  }
+
+  &__pop-sub-menu{
+    display: none;
+    position: absolute;
+    background: $neutral-grey-0;
+    z-index: 1000;
+    overflow: hidden;
+    min-width: 280px;
+    padding: 0;
+    border-radius: $radius-md;
+    box-shadow: 0px 0px 0px 1px rgba($neutral-grey-700, 0.04), 0px 8px 23px rgba($neutral-grey-700, 0.12);
+    top: 40px;
+    left: 0;
+    margin: 0;
+  }
+
+  &__pop-sub-menu li{
+    padding: 0 16px;
+    margin: 0;
+    height: 40px;
+  }
+
+  &__pop-sub-menu a{
+    text-decoration: none;
+    color: $neutral-branded-800;
+    font-size: $fs-2;
+    line-height: 40px;
+    display: flex;
+    justify-content: space-between;
+    border-top-color: transparent;
+    border-bottom-color: $neutral-branded-150;
+    border-width: 1px 0;
+    border-style: solid;
+    cursor: pointer;
+  }
+
+  &__pop-sub-menu li:last-of-type a{
+    border-bottom-width: 0;
+  }
+
+
+  &__pop-sub-menu a:hover{
+    color: $primary-wordpress-100;
+  }
+
+  &__more-item-item-text{
+    height: 38px;
+    line-height: 38px;
+  }
+
+  &__pro-badge{
+    border-radius: 18px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
+    background-size: 140% 20%;
+    background-position: 100% 0;
+    font-size: $fs-0;
+    height: 18px;
+    line-height: 18px;
+    margin: 10px 0;
+    padding: 0 6px;
+  }
+
+  /* Pop Sub Menu - End ----------------------------------------------------------------- */
+
+}
+
+@media screen and (max-width: 1235px){
+
+  .daextlwcnf-admin-toolbar{
+
+    &__menu-items a:not(:first-of-type){
+      display: none;
+    }
+
+
+
+  }
+
+}
+
+@media screen and (max-width: 970px){
+
+  .daextlwcnf-admin-toolbar{
+
+    &__daext-logo-container{
+      display: none;
+    }
+
+  }
+
+}
+
+@media screen and (max-width: 782px){
+
+  .daextlwcnf-admin-toolbar{
+
+    &__upgrade-button{
+      display: none;
+    }
+
+  }
+
+}
+
+@media screen and (max-width: 600px){
+
+  .daextlwcnf-admin-toolbar{
+
+    display: none;
+
+  }
+
+}

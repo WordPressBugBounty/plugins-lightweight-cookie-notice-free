@@ -1,0 +1,588 @@
+/*
+Style used in the Options menu.
+ */
+
+#wpbody-content{
+--wp-admin-theme-color: #{$primary-wordpress-100};
+}
+
+/* Notification Message - Start */
+
+#notification-message{
+	border-radius: $radius-sm;
+	box-shadow: 0 2px 5px rgba($neutral-grey-700,.2), 0 0 56px rgba($neutral-grey-700,.15);
+	display: none;
+	position: fixed;
+	top: 56px;
+	right: 48px;
+	z-index: 9999999999999;
+
+}
+
+.notification-message-wrapper{
+	display: flex;
+}
+
+.notification-message-icon{
+	width: 48px;
+	height: 48px;
+	background: $success-300;
+	border-radius: $radius-sm 0 0 $radius-sm
+}
+
+.notification-message-icon svg{
+	margin: $spacer-md;
+}
+
+.notification-message-icon svg g{
+	fill: $neutral-grey-0;
+}
+
+.notification-message-content{
+	height: 18px;
+	font-size: $fs-3;
+	line-height: 18px;
+	padding: 15px 13px;
+	color: $neutral-grey-0;
+	background: $neutral-branded-600;
+}
+
+.notification-message-dismiss-icon{
+	width: 48px;
+	height: 48px;
+	background: $neutral-branded-600;
+	border-radius: 0 3px 3px 0;
+}
+
+.notification-message-dismiss-icon svg{
+	margin: $spacer-md
+}
+
+.notification-message-dismiss-icon svg g{
+	fill: $neutral-branded-300;
+}
+
+.notification-message-dismiss-icon svg:hover g{
+	fill: $neutral-grey-0;
+}
+
+/* Notification Message - End */
+
+.settings-card{
+	background: $neutral-grey-0;
+	margin-bottom: $spacer-lg;
+	display: none;
+	border-radius: $radius-sm;
+	border-radius: 8px;
+	box-shadow: 0px 1px 2px rgba($neutral-branded-800, 0.1);;
+}
+
+.option-container{
+	padding: $spacer-md 0;
+	display: flex;
+	justify-content: space-between;
+}
+
+.option-container-left{
+	display: flex;
+	flex-direction: column;
+}
+
+.option-container-left label{
+	font-size: $fs-2;
+	line-height: 18px;
+	color: $neutral-branded-700;
+	margin-bottom: 6px;
+	font-weight: 500;
+	display: block;
+}
+
+.settings-card-header{
+	border-bottom: 1px solid #EAECF0;
+	padding: 8px $spacer-lg;
+	display: flex;
+}
+
+.settings-card-body{
+	padding: $spacer-md $spacer-lg;
+}
+
+.settings-card-label{
+	flex: auto;
+	font-size: $fs-5;
+	line-height: 40px;
+	color: $neutral-branded-700;
+}
+
+.settings-navigation{
+	padding: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 0 0 20px;
+	background: $neutral-grey-0;
+	border-radius: 8px;
+	box-shadow: 0px 1px 2px rgba($neutral-branded-800, 0.1);;
+}
+
+.settings-navigation .search-input{
+	padding: 0;
+	margin: 0;
+}
+
+.nav-tabs{
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	margin-right: auto;
+}
+
+.nav-tabs:dir(rtl){
+	margin-left: auto;
+	margin-right: 0;
+}
+
+.search-icon-container{
+	padding: $spacer-md 0;
+	height: $spacer-lg;
+}
+
+.search-icon-container svg,
+.close-search-icon-container svg{
+	width: $spacer-lg;
+	height: $spacer-lg;
+	margin: 0 16px;
+	cursor: pointer;
+}
+
+.search-icon-container svg g,
+.close-search-icon-container svg g{
+	fill: $neutral-branded-700 !important;
+}
+
+.close-search-icon-container{
+	padding: $spacer-md 0;
+	height: $spacer-lg;
+}
+
+.search-input{
+	border: none;
+	outline: none;
+	padding: 0 $spacer-md;
+	width: 100%;
+}
+
+.single-tab{
+	padding: 14px 8px;
+	margin: 0 8px;
+	cursor: pointer;
+	line-height: 18px;
+}
+
+.settings-page-container{
+	display: none;
+}
+
+.active-page{
+	display: block;
+}
+
+.settings-page-description{
+	display: none;
+}
+
+.active-page-description{
+	display: block;
+}
+
+.active-card{
+	display: block;
+}
+
+.active-tab{
+	border-bottom: 2px solid $neutral-branded-700;
+}
+
+.main-header{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px $spacer-lg;
+	background: $neutral-grey-0;
+	height: 28px;
+	margin-bottom: $spacer-lg;
+	box-shadow: 0 1px 0 #c3c4c7, 0 1px 1px 1px rgba($neutral-grey-700,.04);
+}
+
+.main-header h1{
+	font-size: $fs-6;
+	font-weight: 700;
+	width: 1040px;
+	line-height: 28px;
+	margin: 0 auto !important;
+}
+
+.display-hidden{
+	display: none;
+}
+
+.tooltip-container{
+	position: relative;
+	padding: 11px 0;
+}
+
+.tooltip-icon{
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+}
+
+.tooltip-icon svg g{
+	fill: $neutral-branded-400 !important;
+}
+
+.tooltip-icon:hover svg g{
+	fill: $neutral-branded-700 !important;
+}
+
+.react-tooltip{
+	padding: 16px !important;
+	font-size: $fs-2 !important;
+	line-height: 18px !important;
+	color: $neutral-branded-500 !important;
+	background: $neutral-grey-0 !important;
+	border: 1px solid $neutral-branded-300 !important;
+	border-radius: 3px !important;
+	box-shadow: 0 2px 5px rgba($neutral-grey-700,.1), 0 0 56px rgba($neutral-grey-700,.075);
+	width: 256px !important;
+}
+
+.tooltip-link-container{
+	border-top: 1px solid #ccc;
+	padding-top: $spacer-md;
+	margin-top: $spacer-md;
+}
+
+.tooltip-link-container a {
+	display: flex;
+	text-decoration: none;
+	width: fit-content;
+}
+
+.tooltip-link-container a span{
+	color: $neutral-branded-800 !important;
+	line-height: 16px;
+	height: 16px;
+	display: block;
+	text-decoration: underline;
+}
+
+.tooltip-link-container a:hover span{
+	text-decoration-thickness: 3px;
+}
+
+.tooltip-link-container a:hover{
+	text-decoration: underline;
+}
+
+.tooltip-link-container svg{
+	margin-left: 4px;
+	display: block;
+	margin-top: 3px;
+}
+
+.tooltip-link-container svg fill{
+	fill: $neutral-branded-800 !important;
+}
+
+.react-tooltip-arrow{
+	border-right: 1px solid $neutral-branded-300;
+	border-bottom: 1px solid $neutral-branded-300;
+}
+
+/* Rounded sliders */
+.slider.round {
+	border-radius: 34px;
+}
+
+.slider.round:before {
+	border-radius: 50%;
+}
+
+.react-select-container input{
+	min-height: unset;
+}
+
+.react-select-container input:focus{
+	box-shadow: none;
+}
+
+#wpcontent{
+	padding-left: 0 !important;
+}
+
+.settings-navigation{
+	margin: 0 32px;
+}
+
+.settings-container{
+	margin: 0 32px;
+	margin-bottom: 40px;
+}
+
+.wrap{
+	margin: 0 !important;
+}
+
+.option-container .components-text-control__input{
+	border: 1px solid #D0D5DD;
+	border-radius: $radius-sm;
+	height: 40px;
+	padding: 0 12px;
+	margin: 0;
+	width: 600px;
+	box-shadow: 0px 1px 2px rgba($neutral-branded-800, 0.1);;
+}
+
+.option-container .components-textarea-control__input{
+	border: 1px solid $neutral-branded-300;
+	border-radius: $radius-sm;
+	/*height: 40px;*/
+	padding: 8px 16px;
+	width: 300px;
+	resize: none;
+}
+
+.option-container textarea:focus{
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.color-picker-input{
+	border: 1px solid $neutral-branded-300;
+	border-width: 1px 0 1px 1px;
+	border-radius: $radius-sm 0 0 $radius-sm;
+	height: 40px;
+	padding: 0 16px;
+	width: 80px;
+	margin: 1px 0 1px 1px;
+}
+
+.color-picker-field-container{
+	display: flex;
+}
+
+.color-picker-field-label{
+	color: $neutral-branded-700;
+	font-size: $fs-0;
+	line-height: 40px !important;
+	display: block;
+	text-transform: uppercase;
+	font-weight: 500;
+	height: 40px;
+	margin: 0 $spacer-lg $spacer-sm 0;
+}
+
+.swatch-container{
+	width: 38px;
+	height: 38px;
+	border: 1px solid $neutral-branded-300;
+	border-radius: 0 $radius-sm $radius-sm 0;
+	margin: 1px 0;
+}
+
+.swatch{
+	width: 32px;
+	height: 32px;
+	margin: 3px 3px 3px 3px;
+	cursor: pointer;
+	border-radius: 0px;
+}
+
+.popover{
+	margin-left: 16px;
+}
+
+.option-container input:focus{
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.settings-card-save-button{
+	background: $primary-wordpress-100;
+	border: none;
+	font-size: $fs-3;
+	padding: 0 16px;
+	color: $neutral-grey-0;
+	border-radius: $radius-sm;
+	cursor: pointer;
+	height: 40px;
+	background-color: transparent;
+	border-width: 1px;
+	border-style: solid;
+	border-color: $primary-wordpress-100;
+	border-radius: 6px;
+	color: $primary-wordpress-100;
+	font-size: $fs-3;
+	line-height: 38px;
+}
+
+.settings-card-save-button:hover{
+	background: #f3f9fc;
+}
+
+.daextlwcnf-body-container{
+	max-width: 1026px;
+	margin: $spacer-lg 0;
+}
+
+/* Range Control - Start ------------------------------------------------------- */
+
+.components-range-control__root{
+	width: 256px !important;
+	min-width: 256px !important;
+	max-width: 256px !important;
+}
+
+.components-range-control__wrapper{
+	width: 200px !important;
+	margin-top: 5px !important;
+}
+
+.components-range-control__track{
+	background: $primary-wordpress-100 !important;
+}
+
+.components-input-control__input{
+	border-radius: $radius-sm !important;
+	height: 40px !important;
+	padding: 0 16px !important;
+	min-width: 84px !important;
+}
+
+.components-input-control__backdrop{
+	border: 1px solid $neutral-branded-300 !important;
+	width: 84px;
+	border-radius: 3px !important;
+}
+
+.components-range-control__thumb-wrapper > span{
+	background: $primary-wordpress-100 !important;
+}
+
+/* Range Control - End ---------------------------------------------------------- */
+
+/*  ToggleControl - Start ---------------------------------------------------------- */
+
+.components-base-control__help{
+	width: 100%;
+	color: $neutral-branded-500;
+	font-size: $fs-1;
+	line-height: 18px;
+	font-weight: 400;
+	margin: $spacer-sm 0 $spacer-md 0;
+	max-width: 600px;
+}
+
+.components-form-toggle .components-form-toggle__track{
+	border-radius: 12px;
+	background: #ccc;
+	height: 24px;
+	border: none;
+	width: 42px;
+}
+
+.components-form-toggle .components-form-toggle__thumb{
+	width: 20px;
+	height: 20px;
+	background: #fff;
+	border: none;
+	left: 2px;
+	top: 2px;
+}
+
+.components-form-toggle .components-form-toggle__thumb:dir(rtl){
+	right: 2px;
+}
+
+.components-form-toggle.is-checked .components-form-toggle__thumb {
+	transform: translateX(18px);
+}
+
+.components-form-toggle.is-checked .components-form-toggle__thumb:dir(rtl){
+	transform: translateX(-18px);
+}
+
+/* ToggleControl - End ---------------------------------------------------------- */
+
+/* SelectField - Start ---------------------------------------------------------- */
+
+.select-field-label{
+	color: $neutral-branded-700;
+	font-size: $fs-0;
+	line-height: 40px !important;
+	display: block;
+	text-transform: uppercase;
+	font-weight: 500;
+	height: 40px;
+	margin: 0 $spacer-lg $spacer-sm 0;
+}
+
+/* SelectField - End ---------------------------------------------------------- */
+
+/* SelectMultipleField - Start ---------------------------------------------------------- */
+
+.select-multiple-field-label{
+	color: $neutral-branded-700;
+	font-size: $fs-0;
+	line-height: 40px !important;
+	display: block;
+	text-transform: uppercase;
+	font-weight: 500;
+	height: 40px;
+	margin: 0 $spacer-lg $spacer-sm 0;
+}
+
+/* SelectMultipleField - End ---------------------------------------------------------- */
+
+@media (max-width: 760px) {
+
+	.option-container-left{
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.option-container-left label{
+		width: 100% !important;
+		display: block;
+	}
+
+	.option-container-left input{
+		width: 100% !important;
+		display: block;
+	}
+
+	.react-select-container > div > div{
+		width: 100% !important;
+	}
+
+	.option-container-right{
+		display: none;
+	}
+
+	.option-container .components-range-control__number{
+		display: none;
+	}
+
+	.search-icon-container{
+		display: none;
+	}
+
+	.nav-tabs{
+		flex-direction: column;
+		width: 100%;
+	}
+
+}

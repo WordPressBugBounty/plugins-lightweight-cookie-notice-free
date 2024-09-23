@@ -1,0 +1,3 @@
+Build created following this tutorial:
+
+https://javascript.plainenglish.io/how-to-add-a-react-app-to-wordpress-pages-61aee723d607

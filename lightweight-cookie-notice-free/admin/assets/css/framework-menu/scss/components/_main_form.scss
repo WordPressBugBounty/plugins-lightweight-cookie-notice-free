@@ -1,0 +1,186 @@
+/*
+Main Form Block
+
+This style is used for the form used in the CRUD menus and in custom menus with forms like the Wizard and Maintenance
+menus.
+*/
+
+.daextlwcnf-main-form {
+
+  margin-top: 48px;
+
+  &__section-header{
+    font-size: $fs-7;
+    line-height: 32px;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    margin: 20px 0;
+    padding: 0 24px;
+  }
+
+  &__daext-form-section-body{
+    padding: 48px 48px;
+    display: flex;
+    gap: 24px;
+    flex-direction: column;
+  }
+
+  &__daext-form-section-body-opened{
+    display: flex !important;
+  }
+
+  &__section-header ~ &__daext-form-section-body{
+    border-top: 1px solid $neutral-branded-200;
+  }
+
+  &__section-header-title{
+    height: 24px;
+    display: flex;
+    gap: 8px;
+  }
+
+  &__section-header-title .untitled-ui-icon{
+    width: 20px;
+    height: 20px;
+    margin: 2px 0;
+  }
+
+  &__section-header-title .untitled-ui-icon path{
+    stroke: $neutral-branded-400;
+  }
+
+  &__section-header-title-text{
+    font-size: $fs-5;
+    line-height: 24px;
+    color: $neutral-branded-700;
+  }
+
+  &__section-header-toggle{
+    display: flex;
+  }
+
+  &__section-header-toggle .untitled-ui-icon path{
+    stroke: $neutral-branded-500;
+  }
+
+  &__expand-icon{
+    width: 24px;
+    height: 24px;
+  }
+
+  &__daext-form-section{
+    display: flex;
+    flex-direction: column;
+    flex-basis: calc(50% - 16px);
+    background: $neutral-grey-0;
+    border-radius: $radius-lg;
+    box-shadow: $elevation-1;
+  }
+
+  &__daext-form-section:not(:first-child){
+    margin-top: 24px;
+  }
+
+  &__daext-form-field{
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__daext-form-field label{
+    font-size: $fs-2;
+    line-height: 18px;
+    color: $neutral-branded-700;
+    margin-bottom: 6px;
+    font-weight: 500;
+    display: block;
+  }
+
+  &__daext-form-field label .daextlwcnf-required{
+    color: $error-300;
+  }
+
+  &__daext-form-field input{
+    width: 600px;
+    height: 40px;
+    border-radius: $radius-md;
+    border: 1px solid $neutral-branded-300;
+    padding: 4px 12px;
+    box-shadow: $elevation-1;
+    color: $neutral-branded-700;
+    font-size: $fs-2;
+    line-height: 30px;
+    font-weight: 400;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  &__daext-form-field input[type="text"]:focus,
+  &__daext-form-field input[type="number"]:focus{
+    border-color: $primary-branded-200;
+    box-shadow: $elevation-1;
+    outline: 3px solid $neutral-branded-150;
+  }
+
+  &__daext-form-field input::placeholder{
+    color: $neutral-branded-400;
+  }
+
+  &__daext-form-field textarea{
+    width: 600px;
+    height: 80px;
+    border-radius: $radius-md;
+    border: 1px solid $neutral-branded-300;
+    padding: 4px 12px;
+    box-shadow: $elevation-1;
+    color: $neutral-branded-700;
+    font-size: $fs-2;
+    line-height: 18px;
+    font-weight: 400;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  &__daext-form-field textarea:focus{
+    border-color: $primary-branded-200;
+    box-shadow: $elevation-1;
+    outline: 3px solid $neutral-branded-150;
+  }
+
+  &__daext-form-field textarea::placeholder{
+    color: $neutral-branded-400;
+  }
+
+  &__daext-form-field div:last-of-type{
+    display: flex;
+  }
+
+  &__daext-form-field input[type="range"]{
+    width: 232px;
+    margin-right: 16px;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  &__daext-form-field input[type="range"] + input{
+    width: 84px;
+    border-color: $neutral-branded-300;
+    margin: 0;
+  }
+
+  &__daext-form-field select{
+    width: 440px;
+    max-width: 440px;
+  }
+
+  /* Default hidden elements */
+
+  &__daext-form-section-body[data-section-id="advanced"],
+  &__daext-form-section-body[data-section-id="code-snippets"],
+  &__daext-form-section-body[data-section-id="cookie-attributes-display"],
+  &__daext-form-section-body[data-section-id="cookie-attributes-deletion"]{
+    display: none;
+  }
+
+}
+

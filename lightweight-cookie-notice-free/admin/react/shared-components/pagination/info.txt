@@ -1,0 +1,3 @@
+Pagination component based on this tutorial:
+
+https://www.freecodecamp.org/news/build-a-custom-pagination-component-in-react/

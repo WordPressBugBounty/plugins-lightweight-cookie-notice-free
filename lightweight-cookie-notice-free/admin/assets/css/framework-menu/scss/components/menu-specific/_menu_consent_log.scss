@@ -1,0 +1,52 @@
+/* Apply table item alignment */
+.daextlwcnf-react-table{
+
+  & .table-cell-abbreviated-content{
+
+  }
+
+  & .table-cell-expand-button{
+    line-height: 18px;
+    padding: 0px 0px;
+    font-size: $fs_2;
+    height: 20px;
+    text-align: center;
+    width: 20px;
+  }
+
+  & .table-cell-full-content{
+    display: none;
+  }
+
+  /* Max specific column occupy the minimum width possible without wrapping text */
+  &__daextlwcnf-data-table-dashboard-menu tr th:nth-of-type(2),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(2),
+  &__daextlwcnf-data-table-dashboard-menu tr th:nth-of-type(3),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(3),
+  &__daextlwcnf-data-table-dashboard-menu tr th:nth-of-type(4),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(4),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(8),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(8),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(9),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(9),
+  {
+    width: 1%;
+    white-space: nowrap;
+  }
+
+  &__daextlwcnf-data-table-dashboard-menu tr th:nth-of-type(1),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(1),
+  &__daextlwcnf-data-table-dashboard-menu tr th:nth-of-type(5),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(5),
+  &__daextlwcnf-data-table-dashboard-menu tr th:nth-of-type(6),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(6),
+  &__daextlwcnf-data-table-dashboard-menu tr th:nth-of-type(7),
+  &__daextlwcnf-data-table-dashboard-menu tr td:nth-of-type(7),
+  {
+    width: 140px;
+    min-width: 140px;
+    max-width: 140px;
+    word-wrap: break-word;
+  }
+
+}
