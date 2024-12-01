@@ -503,6 +503,14 @@ Style used in the Options menu.
 	top: 2px;
 }
 
+.components-toggle-control .components-form-toggle{
+	height: 24px;
+}
+
+.components-toggle-control .components-toggle-control__help{
+	margin-left: 0;
+}
+
 .components-form-toggle .components-form-toggle__thumb:dir(rtl){
 	right: 2px;
 }

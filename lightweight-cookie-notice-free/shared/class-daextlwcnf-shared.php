@@ -32,7 +32,7 @@ class Daextlwcnf_Shared {
 	private function __construct() {
 
 		$this->data['slug'] = 'daextlwcnf';
-		$this->data['ver']  = '1.15';
+		$this->data['ver']  = '1.16';
 		$this->data['dir']  = substr( plugin_dir_path( __FILE__ ), 0, - 7 );
 		$this->data['url']  = substr( plugin_dir_url( __FILE__ ), 0, - 7 );
 
