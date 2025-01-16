@@ -32,7 +32,7 @@ class Daextlwcnf_Shared {
 	private function __construct() {
 
 		$this->data['slug'] = 'daextlwcnf';
-		$this->data['ver']  = '1.16';
+		$this->data['ver']  = '1.17';
 		$this->data['dir']  = substr( plugin_dir_path( __FILE__ ), 0, - 7 );
 		$this->data['url']  = substr( plugin_dir_url( __FILE__ ), 0, - 7 );
 
@@ -966,9 +966,14 @@ class Daextlwcnf_Shared {
 
 		global $wpdb;
 
+
+		/**
+		 * Get the consent log data. Note that to prevent the query from being too slow or fail due to memory issues,
+		 * only the last 5000 records are retrieved.
+		 */
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$consent_log_a = $wpdb->get_results(
-			"SELECT * FROM {$wpdb->prefix}daextlwcnf_consent_log",
+			"SELECT * FROM {$wpdb->prefix}daextlwcnf_consent_log ORDER BY consent_log_id DESC LIMIT 5000",
 			ARRAY_A
 		);
 
@@ -2299,6 +2304,46 @@ class Daextlwcnf_Shared {
 									'lightweight-cookie-notice-free'
 								),
 								'help'    => __( 'Select the font color for the links of the cookie settings modal window.', 'lightweight-cookie-notice-free' ),
+							),
+							array(
+								'name'          => 'daextlwcnf_cookie_settings_toggle_on_color',
+								'label'         => __( 'Toggle On Color', 'lightweight-cookie-notice-free' ),
+								'type'          => 'color-picker',
+								'tooltip'       => __(
+									'The color of the toggle in the cookie settings modal window when it is in the "On" state.',
+									'lightweight-cookie-notice-free'
+								),
+								'help'          => __( 'Select the color of the toggle in the cookie settings modal window when it is in the "On" state.', 'lightweight-cookie-notice-free' ),
+							),
+							array(
+								'name'          => 'daextlwcnf_cookie_settings_toggle_off_color',
+								'label'         => __( 'Toggle Off Color', 'lightweight-cookie-notice-free' ),
+								'type'          => 'color-picker',
+								'tooltip'       => __(
+									'The color of the toggle in the cookie settings modal window when it is in the "Off" state.',
+									'lightweight-cookie-notice-free'
+								),
+								'help'          => __( 'Select the color of the toggle in the cookie settings modal window when it is in the "Off" state.', 'lightweight-cookie-notice-free' ),
+							),
+							array(
+								'name'          => 'daextlwcnf_cookie_settings_toggle_misc_color',
+								'label'         => __( 'Toggle Mixed Color', 'lightweight-cookie-notice-free' ),
+								'type'          => 'color-picker',
+								'tooltip'       => __(
+									'The color of the toggle in the cookie settings modal window when it is in the "Mixed" state.',
+									'lightweight-cookie-notice-free'
+								),
+								'help'          => __( 'Select the color of the toggle in the cookie settings modal window when it is in the "Mixed" state.', 'lightweight-cookie-notice-free' ),
+							),
+							array(
+								'name'          => 'daextlwcnf_cookie_settings_toggle_disabled_color',
+								'label'         => __( 'Toggle Disabled Color', 'lightweight-cookie-notice-free' ),
+								'type'          => 'color-picker',
+								'tooltip'       => __(
+									'The color of the toggle in the cookie settings modal window when it is in the "Disabled" state.',
+									'lightweight-cookie-notice-free'
+								),
+								'help'          => __( 'Select the color of the toggle in the cookie settings modal window when it is in the "Disabled" state.', 'lightweight-cookie-notice-free' ),
 							),
 							array(
 								'name'    => 'daextlwcnf_cookie_settings_container_background_color',

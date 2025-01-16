@@ -5,7 +5,7 @@ Donate link: https://daext.com
 Requires at least: 5.0
 Tested up to: 6.7.1
 Requires PHP: 7.2
-Stable tag: 1.16
+Stable tag: 1.17
 License: GPLv3
 
 This is the free version of Lightweight Cookie Notice, the lightweight and customizable cookie plugin for WordPress.
@@ -115,6 +115,13 @@ With this procedure you will be able to perform a **Single Site Activation** in 
 3. Click on the **Activate** button (just below the name of the plugin)
 
 == Changelog ==
+
+= 1.17 =
+
+*January 15, 2025*
+
+* The following options have been added to the plugin settings: "Toggle On Color", "Toggle Off Color", "Toggle Mixed Color", "Toggle Disabled Color".
+* The "Acceptance Rate" value is now calculated using a limited number of consent log records to prevent performance issues and memory exhaustion.
 
 = 1.16 =
 
