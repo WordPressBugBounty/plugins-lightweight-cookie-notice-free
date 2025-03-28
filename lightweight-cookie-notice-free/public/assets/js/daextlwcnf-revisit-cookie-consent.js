@@ -183,7 +183,7 @@ window.daextlwcnRevisitCookieConsent = (function(utility) {
     //Delete all the cookies defined in the "Cookies" menu
     if(settings.cookies !== null && settings.cookies.length > 0){
       settings.cookies.forEach((cookie) => {
-        const cookiePathAttribute = null !== cookie.cookie_path_attribute && cookie.cookie_path_attribute.length > 0 ? cookie.path : '/';
+        const cookiePathAttribute = null !== cookie.cookie_path_attribute && cookie.cookie_path_attribute.length > 0 ? cookie.cookie_path_attribute : '/';
         utility.deleteCookie(cookie.name, cookiePathAttribute);
       });
     }
