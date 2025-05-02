@@ -32,7 +32,7 @@ class Daextlwcnf_Shared {
 	private function __construct() {
 
 		$this->data['slug'] = 'daextlwcnf';
-		$this->data['ver']  = '1.18';
+		$this->data['ver']  = '1.19';
 		$this->data['dir']  = substr( plugin_dir_path( __FILE__ ), 0, - 7 );
 		$this->data['url']  = substr( plugin_dir_url( __FILE__ ), 0, - 7 );
 
@@ -57,10 +57,10 @@ class Daextlwcnf_Shared {
 			$this->get( 'slug' ) . '_containers_border_radius' => '4',
 
 			// Cookie Notice ------------------------------------------------------------------------------------------.
-			$this->get( 'slug' ) . '_cookie_notice_main_message_text' => esc_html__( 'This site uses cookies to improve your online experience, allow you to share content on social media, measure traffic to this website and display customised ads based on your browsing activity.', 'lightweight-cookie-notice-free' ),
+			$this->get( 'slug' ) . '_cookie_notice_main_message_text' => 'This site uses cookies to improve your online experience, allow you to share content on social media, measure traffic to this website and display customized ads based on your browsing activity.',
 			$this->get( 'slug' ) . '_cookie_notice_main_message_font_color' => '#666666',
 			$this->get( 'slug' ) . '_cookie_notice_main_message_link_font_color' => '#1e58b1',
-			$this->get( 'slug' ) . '_cookie_notice_button_1_text' => esc_html__( 'Settings', 'lightweight-cookie-notice-free' ),
+			$this->get( 'slug' ) . '_cookie_notice_button_1_text' => 'Settings',
 			$this->get( 'slug' ) . '_cookie_notice_button_1_action' => '1',
 			$this->get( 'slug' ) . '_cookie_notice_button_1_url' => '',
 			$this->get( 'slug' ) . '_cookie_notice_button_1_background_color' => '#ffffff',
@@ -69,7 +69,7 @@ class Daextlwcnf_Shared {
 			$this->get( 'slug' ) . '_cookie_notice_button_1_border_color_hover' => '#1e58b1',
 			$this->get( 'slug' ) . '_cookie_notice_button_1_font_color' => '#1e58b1',
 			$this->get( 'slug' ) . '_cookie_notice_button_1_font_color_hover' => '#1e58b1',
-			$this->get( 'slug' ) . '_cookie_notice_button_2_text' => esc_html__( 'Accept', 'lightweight-cookie-notice-free' ),
+			$this->get( 'slug' ) . '_cookie_notice_button_2_text' => 'Accept',
 			$this->get( 'slug' ) . '_cookie_notice_button_2_action' => '2',
 			$this->get( 'slug' ) . '_cookie_notice_button_2_url' => '',
 			$this->get( 'slug' ) . '_cookie_notice_button_2_background_color' => '#1e58b1',
@@ -78,7 +78,7 @@ class Daextlwcnf_Shared {
 			$this->get( 'slug' ) . '_cookie_notice_button_2_border_color_hover' => '#1e58b1',
 			$this->get( 'slug' ) . '_cookie_notice_button_2_font_color' => '#ffffff',
 			$this->get( 'slug' ) . '_cookie_notice_button_2_font_color_hover' => '#ffffff',
-			$this->get( 'slug' ) . '_cookie_notice_button_3_text' => esc_html__( 'Default Label', 'lightweight-cookie-notice-free' ),
+			$this->get( 'slug' ) . '_cookie_notice_button_3_text' => 'Default Label',
 			$this->get( 'slug' ) . '_cookie_notice_button_3_action' => '0',
 			$this->get( 'slug' ) . '_cookie_notice_button_3_url' => '',
 			$this->get( 'slug' ) . '_cookie_notice_button_3_background_color' => '#1e58b1',
@@ -106,16 +106,16 @@ class Daextlwcnf_Shared {
 
 			// Cookie Settings ----------------------------------------------------------------------------------------.
 			$this->get( 'slug' ) . '_cookie_settings_logo_url' => '',
-			$this->get( 'slug' ) . '_cookie_settings_title' => esc_html__( 'Cookie Settings', 'lightweight-cookie-notice-free' ),
-			$this->get( 'slug' ) . '_cookie_settings_description_header' => '<p>' . esc_html__( 'We want to be transparent about the data we and our partners collect and how we use it, so you can best exercise control over your personal data. For more information, please see our Privacy Policy.', 'lightweight-cookie-notice-free' ) . '</p><p><strong>' . esc_html__( 'Information we collect', 'lightweight-cookie-notice-free' ) . '</strong></p><p>' . esc_html__( 'We use this information to improve the performance and experience of our site visitors. This includes improving search results, showing more relevant content and promotional materials, better communication, and improved site performance.', 'lightweight-cookie-notice-free' ) . '<p>',
+			$this->get( 'slug' ) . '_cookie_settings_title' => 'Cookie Settings',
+			$this->get( 'slug' ) . '_cookie_settings_description_header' => '<p>' . 'We want to be transparent about the data we and our partners collect and how we use it, so you can best exercise control over your personal data. For more information, please see our Privacy Policy.' . '</p><p><strong>' . 'Information we collect' . '</strong></p><p>' . 'We use this information to improve the performance and experience of our site visitors. This includes improving search results, showing more relevant content and promotional materials, better communication, and improved site performance.' . '<p>',
 			$this->get( 'slug' ) . '_cookie_settings_toggle_on_color' => '#3a70c4',
 			$this->get( 'slug' ) . '_cookie_settings_toggle_off_color' => '#808080',
 			$this->get( 'slug' ) . '_cookie_settings_toggle_misc_color' => '#808080',
 			$this->get( 'slug' ) . '_cookie_settings_toggle_disabled_color' => '#e5e5e5',
 			$this->get( 'slug' ) . '_cookie_settings_chevron_color' => '#6e6e6e',
 			$this->get( 'slug' ) . '_cookie_settings_expand_close_color' => '#6e6e6e',
-			$this->get( 'slug' ) . '_cookie_settings_description_footer' => '<p><strong>' . esc_html__( 'Information about cookies', 'lightweight-cookie-notice-free' ) . '</strong></p><p>' . esc_html__( 'We use the following essential and non-essential cookies to better improve your overall web browsing experience. Our partners use cookies and other mechanisms to connect you with your social networks and tailor advertising to better match your interests.', 'lightweight-cookie-notice-free' ) . '</p><p>' . esc_html__( 'You can make your choices by allowing categories of cookies by using the respective activation switches. Essential cookies cannot be rejected as without them certain core website functionalities would not work.', 'lightweight-cookie-notice-free' ) . '</p>',
-			$this->get( 'slug' ) . '_cookie_settings_button_1_text' => esc_html__( 'Close', 'lightweight-cookie-notice-free' ),
+			$this->get( 'slug' ) . '_cookie_settings_description_footer' => '<p><strong>' . 'Information about cookies' . '</strong></p><p>' . 'We use the following essential and non-essential cookies to better improve your overall web browsing experience. Our partners use cookies and other mechanisms to connect you with your social networks and tailor advertising to better match your interests.' . '</p><p>' . 'You can make your choices by allowing categories of cookies by using the respective activation switches. Essential cookies cannot be rejected as without them certain core website functionalities would not work.' . '</p>',
+			$this->get( 'slug' ) . '_cookie_settings_button_1_text' => 'Close',
 			$this->get( 'slug' ) . '_cookie_settings_button_1_action' => '2',
 			$this->get( 'slug' ) . '_cookie_settings_button_1_url' => '',
 			$this->get( 'slug' ) . '_cookie_settings_button_1_background_color' => '#ffffff',
@@ -124,7 +124,7 @@ class Daextlwcnf_Shared {
 			$this->get( 'slug' ) . '_cookie_settings_button_1_border_color_hover' => '#1e58b1',
 			$this->get( 'slug' ) . '_cookie_settings_button_1_font_color' => '#1e58b1',
 			$this->get( 'slug' ) . '_cookie_settings_button_1_font_color_hover' => '#1e58b1',
-			$this->get( 'slug' ) . '_cookie_settings_button_2_text' => esc_html__( 'Accept', 'lightweight-cookie-notice-free' ),
+			$this->get( 'slug' ) . '_cookie_settings_button_2_text' => 'Accept',
 			$this->get( 'slug' ) . '_cookie_settings_button_2_action' => '1',
 			$this->get( 'slug' ) . '_cookie_settings_button_2_url' => '',
 			$this->get( 'slug' ) . '_cookie_settings_button_2_background_color' => '#1e58b1',

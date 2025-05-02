@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Lightweight Cookie Notice
  * Description: Generates a lightweight cookie notice. (Lite Version)
- * Version: 1.18
+ * Version: 1.19
  * Author: DAEXT
  * Author URI: https://daext.com
  * Text Domain: lightweight-cookie-notice-free

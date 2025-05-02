@@ -183,7 +183,7 @@ class Daextlwcnf_Pagination {
 			echo '<div class="daextlwcnf-crud-table-controls__pagination-paging-text">' .
 				esc_html( $this->current_page ) .
 				'&nbsp' .
-				esc_html__( 'of' ) .
+				esc_html__( 'of', 'lightweight-cookie-notice-free' ) .
 				'&nbsp' .
 				esc_html( $last_page ) .
 				'</div>';

@@ -3,9 +3,9 @@ Contributors: DAEXT
 Tags: cookie consent, cookie notice, cookie banner, GDPR, CCPA
 Donate link: https://daext.com
 Requires at least: 5.0
-Tested up to: 6.7.2
+Tested up to: 6.8.1
 Requires PHP: 7.2
-Stable tag: 1.18
+Stable tag: 1.19
 License: GPLv3
 
 This is the free version of Lightweight Cookie Notice, the lightweight and customizable cookie plugin for WordPress.
@@ -115,6 +115,12 @@ With this procedure you will be able to perform a **Single Site Activation** in 
 3. Click on the **Activate** button (just below the name of the plugin)
 
 == Changelog ==
+
+= 1.19 =
+
+*May 2, 2025*
+
+* Fixed PHP notice caused by early use of translation functions.
 
 = 1.18 =
 
