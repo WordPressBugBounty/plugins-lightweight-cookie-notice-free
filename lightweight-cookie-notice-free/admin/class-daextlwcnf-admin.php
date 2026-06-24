@@ -616,7 +616,7 @@ class Daextlwcnf_Admin {
 	 */
 	public static function ac_initialize_options() {
 
-		if ( intval( get_option( 'daextlwcnf_options_version' ), 10 ) < 1 ) {
+		if ( intval( get_option( 'daextlwcnf_options_version' ), 10 ) < 2 ) {
 
 			// assign an instance of Daextlwcnf_Shared.
 			$shared = Daextlwcnf_Shared::get_instance();
@@ -626,7 +626,7 @@ class Daextlwcnf_Admin {
 			}
 
 			// Update options version.
-			update_option( 'daextlwcnf_options_version', '1' );
+			update_option( 'daextlwcnf_options_version', '2' );
 
 		}
 	}

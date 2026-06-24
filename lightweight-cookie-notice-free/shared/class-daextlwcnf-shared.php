@@ -32,7 +32,7 @@ class Daextlwcnf_Shared {
 	private function __construct() {
 
 		$this->data['slug'] = 'daextlwcnf';
-		$this->data['ver']  = '1.19';
+		$this->data['ver']  = '1.20';
 		$this->data['dir']  = substr( plugin_dir_path( __FILE__ ), 0, - 7 );
 		$this->data['url']  = substr( plugin_dir_url( __FILE__ ), 0, - 7 );
 
@@ -465,6 +465,10 @@ class Daextlwcnf_Shared {
 			'Zimbabwe'                                     => 'zw',
 		);
 		$this->data['options'][ $this->get( 'slug' ) . '_locale' ] = $geolocation_locale;
+
+		// Generate a random key for W3 Total Cache integration.
+		$this->data['options'][ $this->get( 'slug' ) . '_w3tc_key' ] = 'daextlwcnf_' . bin2hex( random_bytes( 16 ) );
+
 	}
 
 	/**

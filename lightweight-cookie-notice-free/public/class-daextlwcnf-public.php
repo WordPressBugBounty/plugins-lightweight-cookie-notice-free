@@ -61,7 +61,10 @@ class Daextlwcnf_Public {
 		 */
 		if ( function_exists( 'w3tc_flush_all' ) &&
 			1 === intval( get_option( $this->shared->get( 'slug' ) . '_page_fragment_caching_exception_w3tc' ), 10 ) ) {
-			define( 'W3TC_DYNAMIC_SECURITY', 'daextlwcnf' );
+
+			$daextlwcnf_w3tc_key = get_option( 'daextlwcnf_w3tc_key' );
+			define( 'W3TC_DYNAMIC_SECURITY', $daextlwcnf_w3tc_key );
+
 			add_action( 'wp_head', array( $this, 'print_head_scripts_w3tc' ) );
 			add_action( 'wp_print_footer_scripts', array( $this, 'print_body_scripts_w3tc' ) );
 		} else {
@@ -544,13 +547,16 @@ class Daextlwcnf_Public {
 	 */
 	public function print_head_scripts_w3tc() {
 
+		$key = get_option( 'daextlwcnf_w3tc_key' );
+
 		?>
 
-		<!-- mfunc daextlwcnf -->
-		daextlwcnf_print_scripts(false);
-		<!-- /mfunc daextlwcnf -->
+		<!-- mfunc <?php echo esc_html( $key ); ?> -->
+		daextlwcnf_print_scripts( false );
+		<!-- /mfunc <?php echo esc_html( $key ); ?> -->
 
 		<?php
+
 	}
 
 	/**
@@ -570,13 +576,16 @@ class Daextlwcnf_Public {
 	 */
 	public function print_body_scripts_w3tc() {
 
+		$key = get_option( 'daextlwcnf_w3tc_key' );
+
 		?>
 
-		<!-- mfunc daextlwcnf -->
-		daextlwcnf_print_scripts(true);
-		<!-- /mfunc daextlwcnf -->
+		<!-- mfunc <?php echo esc_html( $key ); ?> -->
+		daextlwcnf_print_scripts( true );
+		<!-- /mfunc <?php echo esc_html( $key ); ?> -->
 
 		<?php
+
 	}
 
 	/**
