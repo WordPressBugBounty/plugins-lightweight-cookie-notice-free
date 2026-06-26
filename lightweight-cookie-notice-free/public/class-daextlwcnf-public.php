@@ -182,6 +182,15 @@ class Daextlwcnf_Public {
 		// Generate the array that will be passed to wp_localize_script().
 		$php_data = array(
 			'nonce'               => wp_create_nonce( 'daextlwcnf' ),
+			/*
+			 * A 'wp_rest' nonce is passed so that the JS can include it as the
+			 * X-WP-Nonce header when fetching a fresh 'daextlwcnf' nonce from
+			 * the REST endpoint (/nonce/). Without this header WordPress REST
+			 * API cookie authentication is skipped and wp_create_nonce() runs
+			 * as user 0, producing a nonce that then fails check_ajax_referer()
+			 * for any logged-in user in the AJAX handler.
+			 */
+			'wpRestNonce'         => wp_create_nonce( 'wp_rest' ),
 			'ajaxUrl'             => admin_url( 'admin-ajax.php' ),
 			'nameText'            => esc_html__( 'Name', 'lightweight-cookie-notice-free' ),
 			'expirationText'      => esc_html__( 'Expiration', 'lightweight-cookie-notice-free' ),
@@ -192,6 +201,7 @@ class Daextlwcnf_Public {
 			'sensitivityText'     => esc_html__( 'Sensitivity', 'lightweight-cookie-notice-free' ),
 			'securityText'        => esc_html__( 'Security', 'lightweight-cookie-notice-free' ),
 			'moreInformationText' => esc_html__( 'More Information', 'lightweight-cookie-notice-free' ),
+			'restUrl' => rest_url(),
 		);
 
 		// Make PHP data available to the JavaScript part in the DAEXTLWCN_PHPDATA object.

@@ -1085,11 +1085,24 @@ window.daextLwcnCookieNotice = (function(utility, cookieSettings, revisitCookieC
               }
 
             });
-            oReq1.open('POST', window.DAEXTLWCN_PHPDATA.ajaxUrl, true);
-            let formData = new FormData();
-            formData.append('action', 'daextlwcnf_geolocate_user');
-            formData.append('security', window.DAEXTLWCN_PHPDATA.nonce);
-            oReq1.send(formData);
+            /*
+             * Fetch a fresh nonce via the REST endpoint before sending the AJAX request.
+             * The page-embedded nonce (DAEXTLWCN_PHPDATA.nonce) can expire after 24 hours
+             * if the page is served from a cache, causing check_ajax_referer() in
+             * daextlwcnf_geolocate_user() to fail. The X-WP-Nonce header authenticates the
+             * current user in the REST context so the returned nonce is valid for both
+             * logged-in and anonymous visitors (see daextlwcnf-utility.js for a full
+             * explanation of why X-WP-Nonce is required).
+             */
+            fetch(window.DAEXTLWCN_PHPDATA.restUrl + 'lightweight-cookie-notice-free/v1/nonce/', { credentials: 'same-origin', headers: { 'X-WP-Nonce': window.DAEXTLWCN_PHPDATA.wpRestNonce } })
+              .then(function(response) { return response.json(); })
+              .then(function(data) {
+                let formData = new FormData();
+                formData.append('action', 'daextlwcnf_geolocate_user');
+                formData.append('security', data.nonce);
+                oReq1.open('POST', window.DAEXTLWCN_PHPDATA.ajaxUrl, true);
+                oReq1.send(formData);
+              });
 
             break;
 

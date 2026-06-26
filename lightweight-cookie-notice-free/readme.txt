@@ -5,7 +5,7 @@ Donate link: https://daext.com
 Requires at least: 5.0
 Tested up to: 7.0
 Requires PHP: 7.2
-Stable tag: 1.20
+Stable tag: 1.21
 License: GPLv3
 
 This is the free version of Lightweight Cookie Notice, the lightweight and customizable cookie plugin for WordPress.
@@ -115,6 +115,12 @@ With this procedure you will be able to perform a **Single Site Activation** in 
 3. Click on the **Activate** button (just below the name of the plugin)
 
 == Changelog ==
+
+= 1.21 =
+
+*June 25, 2026*
+
+* Consent log submissions and geolocation checks now work correctly on sites using page caching with long cache durations.
 
 = 1.20 =
 

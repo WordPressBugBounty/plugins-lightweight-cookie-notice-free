@@ -317,24 +317,34 @@ window.daextlwcnUtility = {
     const url = window.location.href;
     const country_code = localStorage.getItem("daextlwcnf_country_code") !== null ? localStorage.getItem("daextlwcnf_country_code") : '';
 
-    //Ajax request
-    const oReq1 = new XMLHttpRequest();
-    oReq1.addEventListener('load', function (response) {
+    /**
+     * Fetch a fresh nonce from the REST API before submitting so that consent log
+     * submissions succeed even when the page has been served from a long-lived cache
+     * and the nonce originally embedded in DAEXTLWCN_PHPDATA has since expired.
+     *
+     * The X-WP-Nonce header carries a 'wp_rest' nonce so that WordPress REST API
+     * cookie authentication recognises the logged-in user. Without it, WordPress
+     * resets the current user to 0 before the callback runs, causing wp_create_nonce()
+     * to return a nonce for an anonymous user. That nonce then fails check_ajax_referer()
+     * in daextlwcnf_save_consent_log() for any logged-in visitor.
+     */
+    fetch(window.DAEXTLWCN_PHPDATA.restUrl + 'lightweight-cookie-notice-free/v1/nonce/', { credentials: 'same-origin', headers: { 'X-WP-Nonce': window.DAEXTLWCN_PHPDATA.wpRestNonce } })
+      .then(function (response) { return response.json(); })
+      .then(function (data) {
+        const oReq1 = new XMLHttpRequest();
+        oReq1.addEventListener('load', function () {
+          window.daextlwcnUtility.setCookie('daextlwcnf-encrypted-key', this.response, settings);
+        });
 
-      // Create a cookie that keeps the category acceptance
-      window.daextlwcnUtility.setCookie('daextlwcnf-encrypted-key', this.response,
-          settings);
-
-    });
-
-    oReq1.open('POST', window.DAEXTLWCN_PHPDATA.ajaxUrl, true);
-    let formData = new FormData();
-    formData.append('action', 'daextlwcnf_save_consent_log');
-    formData.append('security', window.DAEXTLWCN_PHPDATA.nonce);
-    formData.append('category_cookies', categoryCookies);
-    formData.append('url', url);
-    formData.append('country_code', country_code);
-    oReq1.send(formData);
+        oReq1.open('POST', window.DAEXTLWCN_PHPDATA.ajaxUrl, true);
+        let formData = new FormData();
+        formData.append('action', 'daextlwcnf_save_consent_log');
+        formData.append('security', data.nonce);
+        formData.append('category_cookies', categoryCookies);
+        formData.append('url', url);
+        formData.append('country_code', country_code);
+        oReq1.send(formData);
+      });
 
   },
 

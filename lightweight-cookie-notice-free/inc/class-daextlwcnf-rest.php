@@ -92,6 +92,21 @@ class Daextlwcnf_Rest {
 				'permission_callback' => array( $this, 'rest_api_daext_lightweight_cookie_notice_read_statistics_callback_permission_check' ),
 			)
 		);
+
+		/**
+		 * Add the GET 'lightweight-cookie-notice-free/v1/nonce' endpoint to the Rest API.
+		 * This endpoint is intentionally public and unauthenticated so that cached pages can
+		 * retrieve a fresh nonce after the one embedded at render time has expired.
+		 */
+		register_rest_route(
+			'lightweight-cookie-notice-free/v1',
+			'/nonce/',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'rest_api_daext_lightweight_cookie_notice_get_nonce_callback' ),
+				'permission_callback' => '__return_true',
+			)
+		);
 	}
 
 	/**
@@ -511,5 +526,18 @@ class Daextlwcnf_Rest {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Callback for the GET 'lightweight-cookie-notice-free/v1/nonce' endpoint of the Rest API.
+	 *
+	 * Returns a fresh nonce for the 'daextlwcnf' action. WordPress automatically adds
+	 * Cache-Control: no-cache headers to all REST responses, so this endpoint will never be
+	 * served from a page cache and will always return a valid nonce.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function rest_api_daext_lightweight_cookie_notice_get_nonce_callback() {
+		return rest_ensure_response( array( 'nonce' => wp_create_nonce( 'daextlwcnf' ) ) );
 	}
 }
