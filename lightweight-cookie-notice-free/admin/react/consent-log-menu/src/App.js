@@ -4,6 +4,7 @@ import LoadingScreen from "../../shared-components/LoadingScreen";
 
 const useState = wp.element.useState;
 const useEffect = wp.element.useEffect;
+const useRef = wp.element.useRef;
 
 const {__} = wp.i18n;
 
@@ -19,7 +20,11 @@ const App = () => {
         }
     );
 
+    // The full loading screen is displayed only on the first load and when the metrics are updated.
     const [dataAreLoading, setDataAreLoading] = useState(true);
+
+    // Used to dim the table while a page, a sorting, or a search is loaded.
+    const [dataAreRefreshing, setDataAreRefreshing] = useState(false);
 
     const [dataUpdateRequired, setDataUpdateRequired] = useState(false);
 
@@ -29,12 +34,28 @@ const App = () => {
         acceptanceRate: 'N/A'
     });
 
+    // The records are paginated on the server, so only the records of the current page are retrieved.
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pagination, setPagination] = useState({
+        itemsPerPage: 10,
+        totalItems: 0
+    });
+
+    // Used to ignore the responses of requests that have been replaced by more recent requests.
+    const lastRequestId = useRef(0);
+
     useEffect(() => {
 
-        setDataAreLoading(true);
+        const requestId = ++lastRequestId.current;
+
+        if (dataUpdateRequired) {
+            setDataAreLoading(true);
+        } else {
+            setDataAreRefreshing(true);
+        }
 
         /**
-         * Initialize the chart data with the data received from the REST API
+         * Initialize the table data with the data received from the REST API
          * endpoint provided by the plugin.
          */
         wp.apiFetch({
@@ -44,9 +65,15 @@ const App = () => {
                 search_string: formData.searchString,
                 sorting_column: formData.sortingColumn,
                 sorting_order: formData.sortingOrder,
+                current_page: currentPage,
                 data_update_required: dataUpdateRequired
             }
         }).then(data => {
+
+                // Ignore the response if a more recent request has been sent.
+                if (requestId !== lastRequestId.current) {
+                    return;
+                }
 
                 // Set the table data with setTableData().
                 setTableData(data.table);
@@ -56,6 +83,15 @@ const App = () => {
                     allRecords: data.statistics.all_records,
                     acceptanceRate: data.statistics.acceptance_rate
                 });
+
+                // Set the pagination data. The current page is adjusted by the server when it's out of range.
+                setPagination({
+                    itemsPerPage: data.pagination.items_per_page,
+                    totalItems: data.pagination.total_items
+                });
+                if (data.pagination.current_page !== currentPage) {
+                    setCurrentPage(data.pagination.current_page);
+                }
 
                 if (dataUpdateRequired) {
 
@@ -73,10 +109,17 @@ const App = () => {
                 }
 
                 setDataAreLoading(false);
+                setDataAreRefreshing(false);
 
         }).catch(error => {
 
+            // Ignore the response if a more recent request has been sent.
+            if (requestId !== lastRequestId.current) {
+                return;
+            }
+
             setDataAreLoading(false);
+            setDataAreRefreshing(false);
 
             // Set data to the initial state.
             setTableData([]);
@@ -84,20 +127,9 @@ const App = () => {
                 allRecords: 0,
                 acceptanceRate: 'N/A'
             });
-
-            /**
-             * Since this type of error is typically caused by a misconfiguration of the options and the resulting
-             * server side error 500 "Allowed memory size of xxx bytes exhausted" we set the options involved in the
-             * error to the default values.
-             */
-            wp.apiFetch({
-                path: '/lightweight-cookie-notice-free/v1/options',
-                method: 'POST',
-                data: {
-                    'daextlwcnf_max_displayed_consent_log_records': 1000,
-                },
-            }).then(data => {
-                // Do nothing.
+            setPagination({
+                itemsPerPage: 10,
+                totalItems: 0
             });
 
         });
@@ -106,6 +138,7 @@ const App = () => {
         formData.searchStringChanged,
         formData.sortingColumn,
         formData.sortingOrder,
+        currentPage,
         dataUpdateRequired
     ]);
 
@@ -146,6 +179,9 @@ const App = () => {
             sortingOrder: sortingOrder
         })
 
+        // Display the first page of the newly sorted records.
+        setCurrentPage(1);
+
     }
 
     /**
@@ -153,6 +189,7 @@ const App = () => {
      * @param e
      */
     function handleDataUpdateRequired(e) {
+        setCurrentPage(1);
         setDataUpdateRequired(prevDataUpdateRequired => {
             return !prevDataUpdateRequired;
         });
@@ -169,7 +206,7 @@ const App = () => {
 
                         <div className="daextlwcnf-admin-body">
 
-                            <div className={'daextlwcnf-react-table'}>
+                            <div className={'daextlwcnf-react-table' + (dataAreRefreshing ? ' daextlwcnf-react-table--refreshing' : '')}>
 
                                 <div className={'daextlwcnf-react-table-header'}>
                                     <div className={'statistics'}>
@@ -201,10 +238,15 @@ const App = () => {
                                         />
                                         <input id={'daextlwcnf-search-button'} className={'daextlwcnf-btn daextlwcnf-btn-secondary'}
                                                type={'submit'} value={__('Search', 'lightweight-cookie-notice-free')}
-                                               onClick={() => setFormData({
-                                                   ...formData,
-                                                   searchStringChanged: formData.searchStringChanged ? false : true
-                                               })}
+                                               onClick={() => {
+                                                   setFormData({
+                                                       ...formData,
+                                                       searchStringChanged: formData.searchStringChanged ? false : true
+                                                   });
+
+                                                   // Display the first page of the search results.
+                                                   setCurrentPage(1);
+                                               }}
                                         />
                                     </div>
 
@@ -214,6 +256,10 @@ const App = () => {
                                     data={tableData}
                                     handleSortingChanges={handleSortingChanges}
                                     formData={formData}
+                                    currentPage={currentPage}
+                                    itemsPerPage={pagination.itemsPerPage}
+                                    totalItems={pagination.totalItems}
+                                    onPageChange={page => setCurrentPage(page)}
                                 />
 
                             </div>

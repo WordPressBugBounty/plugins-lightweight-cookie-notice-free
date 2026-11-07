@@ -1,0 +1,39 @@
+/*
+ * Custom admin footer — replaces the default WordPress "Thank you for creating with WordPress. Version X.X"
+ * footer text on the plugin's admin pages.
+ *
+ * The footer is rendered by WordPress inside #wpfooter. We override its appearance to match the plugin's
+ * visual style when the plugin hooks replace the default text via admin_footer_text / update_footer filters.
+ */
+
+#wpfooter {
+  border-top: 1px solid $neutral-branded-250;
+  background: $neutral-grey-0;
+  padding: 12px 32px;
+  box-shadow: $elevation-1;
+
+  #footer-left {
+    color: $neutral-branded-600;
+    font-size: $fs-2;
+
+      a {
+        color: $ui-primary-700;
+        text-decoration: underline;
+
+        &:hover {
+          color: $ui-primary-900;
+          text-decoration: underline;
+        }
+
+        &:focus-visible {
+          @include focus-ring;
+          border-radius: $radius-sm;
+        }
+      }
+  }
+
+  #footer-upgrade {
+    color: $neutral-branded-500;
+    font-size: $fs-1;
+  }
+}

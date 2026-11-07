@@ -49,8 +49,8 @@ const SelectField = (props) => {
     control: (provided, state) => ({
       ...provided,
       width: 440, // Set your custom width here
-      borderColor: state.isFocused ? '#0783BE !important' : '#e1e1e1',
-      boxShadow: state.isFocused ? '0 0 0 1px #0783BE !important' : '#e1e1e1',
+      borderColor: state.isFocused ? '#196EC6' : '#D0D6DD',
+      boxShadow: state.isFocused ? '0 0 0 1px #FFFFFF, 0 0 0 3px #1E80D9' : 'none',
     }),
     input: (baseStyles, state) => ({
       ...baseStyles,
@@ -61,8 +61,8 @@ const SelectField = (props) => {
     }),
     option: (provided, state) => ({
       ...provided,
-      background: state.isFocused ? '#0783BE' : '#ffffff',
-      color: state.isFocused ? '#ffffff' : '#3c434a',
+      background: state.isFocused ? '#1E80D9' : '#ffffff',
+      color: state.isFocused ? '#ffffff' : '#344255',
     }),
   };
 

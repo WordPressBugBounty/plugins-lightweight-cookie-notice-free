@@ -48,8 +48,13 @@ logo of the DAEXT website.
   }
 
   &__menu-item.is-active .untitled-ui-icon path,
-  &__menu-item:hover .untitled-ui-icon path{
+  &__menu-item:hover .untitled-ui-icon path,
+  &__menu-item:focus .untitled-ui-icon path{
     stroke: $neutral-branded-50;
+  }
+
+  &__daext-logo-container{
+    display: none;
   }
 
   &__plugin-logo{
@@ -80,15 +85,9 @@ logo of the DAEXT website.
       background: rgba($neutral-grey-0, 0.1);
       color: $neutral-branded-50;
     }
-    &:focus-visible {
-      border: {
-        width: 1px;
-        style: solid;
-        //color: $neutral-branded-500;
-      }
-    }
     &:focus {
       box-shadow: none;
+      color: $neutral-branded-50;
     }
 
   }
@@ -98,11 +97,11 @@ logo of the DAEXT website.
     gap: 24px;
   }
 
-  &__upgrade-button{
+  &__upgrade-button {
     padding: 8px 16px;
     height: 20px;
     margin: 2px 0;
-    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
+    background: linear-gradient(90.52deg, $ui-primary-600 0.44%, $accented-300 113.3%);
     border-radius: $radius-md;
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
     color: $neutral-grey-0;
@@ -110,14 +109,19 @@ logo of the DAEXT website.
     text-decoration: none;
     display: flex;
     gap: 6px;
+    transition: opacity 0.2s ease;
   }
 
-  &__upgrade-button:hover{
+  &__upgrade-button:hover {
     color: $neutral-grey-0;
-    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
-    background-size: 160% 80%;
-    background-position: 100% 0;
-    transition: background-position 0.5s;
+    opacity: 0.90;
+  }
+
+  &__upgrade-button:focus{
+    color: $neutral-grey-0;
+    outline: none;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    border-radius: $radius-md;
   }
 
   &__upgrade-button .untitled-ui-icon{
@@ -133,10 +137,6 @@ logo of the DAEXT website.
   &__upgrade-button-text{
     line-height: 20px;
     height: 20px;
-  }
-
-  &__upgrade-button a{
-
   }
 
   &__daext-logo{
@@ -193,7 +193,7 @@ logo of the DAEXT website.
 
 
   &__pop-sub-menu a:hover{
-    color: $primary-wordpress-100;
+    color: $ui-primary-700;
   }
 
   &__more-item-item-text{
@@ -206,7 +206,7 @@ logo of the DAEXT website.
     justify-content: center;
     align-items: center;
     color: white;
-    background: linear-gradient(90.52deg, $primary-branded-200 0.44%, $accented-300 113.3%);
+    background: linear-gradient(90.52deg, $ui-primary-600 0.44%, $accented-300 113.3%);
     background-size: 140% 20%;
     background-position: 100% 0;
     font-size: $fs-0;

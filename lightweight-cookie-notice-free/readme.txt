@@ -3,9 +3,9 @@ Contributors: DAEXT
 Tags: cookie consent, cookie notice, cookie banner, GDPR, CCPA
 Donate link: https://daext.com
 Requires at least: 5.0
-Tested up to: 7.0
-Requires PHP: 7.2
-Stable tag: 1.21
+Tested up to: 7.1
+Requires PHP: 7.3
+Stable tag: 1.22
 License: GPLv3
 
 This is the free version of Lightweight Cookie Notice, the lightweight and customizable cookie plugin for WordPress.
@@ -115,6 +115,26 @@ With this procedure you will be able to perform a **Single Site Activation** in 
 3. Click on the **Activate** button (just below the name of the plugin)
 
 == Changelog ==
+
+= 1.22 =
+
+*November 7, 2026*
+
+* Improved the loading speed of the "Categories" menu on sites with many consent log records.
+* Updated the admin UI color palette to use branded colors instead of the default WordPress colors.
+* Added a custom admin footer in place of the default WordPress footer text.
+* Added a notices manager class used to display documentation resources and a link to rate the plugin.
+* Fixed a fatal error that occurred when the Pro version was activated while the Free version was active.
+* Fixed an issue where the "Shake Effect" option could not be saved.
+* Fixed the anonymization of IPv6 addresses stored in the consent log.
+* Fixed an issue where the "Three Months" value of the "Cookie Expiration" option set a cookie lifetime of about 104 days instead of 90 days.
+* Removed the unused "cookies", "delete-cookies", and "revisit-consent" shortcodes, which could conflict with other plugins using the same shortcode names.
+* Fixed an issue where the export of the "Tools" menu failed on sites with a large consent log.
+* Improved the loading speed of the "Consent Log" menu, which now paginates the records on the server and allows browsing all the consent log records.
+* Removed the "Consent Log Records" option, no longer necessary since all the consent log records can now be browsed in the "Consent Log" menu.
+* Added the "Consent Log Retention" option, used to automatically delete the consent log records older than the selected period.
+* Added the "Include the consent log records" toggle to the export of the "Tools" menu, used to generate a smaller file without the consent log records.
+* Fixed an issue where clicking the label of a toggle field did not change the toggle.
 
 = 1.21 =
 

@@ -81,6 +81,9 @@ class Daextlwcnf_Maintenance_Menu_Elements extends Daextlwcnf_Menu_Elements {
 						// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 						$query_result = $wpdb->query( "DELETE FROM {$wpdb->prefix}daextlwcnf_consent_log" );
 
+						// Delete the cached acceptance rates of the categories.
+						$this->shared->delete_acceptance_rates_cache();
+
 						$this->shared->save_dismissible_notice(
 							__( 'The consolidated consent statistics have been deleted.', 'lightweight-cookie-notice-free' ),
 							'updated'

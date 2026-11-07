@@ -9,8 +9,14 @@
         margin-top: 0;
     }
 
-    .daextlwcnf-main-form__daext-form-section-body p:last-of-type{
+    /* Applied only to the paragraphs of the section body, not to the descriptions of the form fields. */
+    .daextlwcnf-main-form__daext-form-section-body > p:last-of-type{
         margin-top: -24px;
+    }
+
+    /* Space between the form fields and the submit button. */
+    .daextlwcnf-main-form__daext-form-section-body form .daextlwcnf-main-form__daext-form-field{
+        margin-bottom: 24px;
     }
 
 }

@@ -6,7 +6,7 @@
 }
 
 .ui-dialog[role="dialog"] {
-    background: #f7f7f7 !important;
+    background: $neutral-branded-50 !important;
     z-index: 100001 !important;
     display: flex;
     flex-direction: column;
@@ -56,7 +56,7 @@
 
 .ui-dialog[role="dialog"] .ui-dialog-content {
     padding: 8px 12px !important;
-    background: #fdfdfd !important;
+    background: $neutral-grey-100 !important;
 }
 
 .ui-dialog[role="dialog"] .ui-dialog-content p {
@@ -67,7 +67,7 @@
 
 .ui-dialog[role="dialog"] .ui-button-text {
     font-size: 12px !important;
-    color: #555;
+    color: $neutral-branded-500;
     height: 26px !important;
     line-height: 26px !important;
     display: block !important;
@@ -97,15 +97,15 @@
 }
 
 .ui-dialog[role="dialog"] .ui-dialog-buttonset button:first-of-type{
-    background: $primary-wordpress-100 !important;
+    background: $ui-primary-600 !important;
     color: $neutral-grey-0 !important;
-    border-color: rgba($neutral-branded-800, 0.2) !important;
+    border-color: $ui-primary-700 !important;
 }
 
 .ui-dialog[role="dialog"] .ui-dialog-buttonset button:last-of-type{
     background: transparent !important;
-    color: $primary-wordpress-100 !important;
-    border-color: $primary-wordpress-100 !important;
+    color: $ui-primary-700 !important;
+    border-color: $ui-primary-700 !important;
 }
 
 .ui-dialog-buttonset{
@@ -114,7 +114,7 @@
 }
 
 .ui-dialog[role="dialog"] .ui-dialog-buttonset button:first-of-type:hover {
-    background: $primary-wordpress-500;
+    background: $ui-primary-800;
     color: $neutral-grey-0;
 }
 
@@ -122,12 +122,13 @@
     background-color: $neutral-branded-100;
 }
 
-//.ui-dialog[role="dialog"] .ui-dialog-buttonset button:focus {
-//    border-color: #5c9bd8 !important;
-//    outline: none !important;
-//    background: #fafafa !important;
-//    color: #555 !important;
-//}
+.ui-dialog[role="dialog"] .ui-dialog-buttonset button:first-of-type:focus-visible {
+    @include focus-filled;
+}
+
+.ui-dialog[role="dialog"] .ui-dialog-buttonset button:last-of-type:focus-visible {
+    @include focus-ring;
+}
 
 .ui-dialog[role="dialog"] .ui-dialog-buttonset button:not(:first-of-type) {
     //margin-left: 4px !important;
@@ -143,7 +144,7 @@
 
 /* Overlays */
 .ui-widget-overlay {
-    background: #aaaaaa !important;
+    background: $neutral-branded-400 !important;
     opacity: .15 !important;
     filter: Alpha(Opacity=60) !important; /* support: IE8 */
 }

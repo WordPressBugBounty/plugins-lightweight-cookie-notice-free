@@ -17,7 +17,7 @@ actions and the pagination.
         text-align: center;
         width: 24px;
         padding: 7px 7px;
-        border: 1px solid rgb(220, 220, 222);
+        border: 1px solid $neutral-branded-300;
         border-radius: $radius-md;
         display: flex;
     }
@@ -32,7 +32,7 @@ actions and the pagination.
     }
 
     &__daext-tablenav > a svg path{
-        stroke: $primary-wordpress-400;
+        stroke: $ui-primary-800;
     }
 
     &__daext-tablenav > a:hover svg path{
@@ -55,12 +55,16 @@ actions and the pagination.
     }
 
     &__daext-tablenav > a:not(.disabled){
-        border-color: $primary-wordpress-400;
+        border-color: $ui-primary-800;
     }
 
     &__daext-tablenav > a:not(.disabled):hover{
         color: $neutral-grey-0 !important;
-        background: $primary-wordpress-300;
+        background: $ui-primary-700;
+    }
+
+    &__daext-tablenav > a:not(.disabled):focus{
+        @include focus-ring;
     }
 
     &__daext-tablenav > .disabled{
@@ -97,6 +101,17 @@ actions and the pagination.
         height: 40px;
     }
 
+    &__bulk-actions form{
+        display: flex;
+        gap: 4px;
+    }
+
+    &__bulk-actions form select{
+        padding: 0 24px 0 8px;
+        background-position: right 5px top 55%;
+        margin: 0 1px 0 0;
+    }
+
 }
 
 @media screen and (max-width: 960px){
@@ -106,10 +121,6 @@ actions and the pagination.
         flex-direction: column;
         gap: 40px;
         position: relative;
-
-        &__bulk-actions{
-            width: 100%;
-        }
 
         &__pagination-container{
             width: 100%;

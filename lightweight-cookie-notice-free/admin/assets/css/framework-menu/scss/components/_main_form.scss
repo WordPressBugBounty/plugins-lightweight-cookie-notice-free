@@ -26,6 +26,14 @@ menus.
     flex-direction: column;
   }
 
+  &__daext-form-section-body p a{
+    color: $ui-primary-700;
+  }
+
+  &__daext-form-section-body p a:hover {
+    color: $ui-primary-900;
+  }
+
   &__daext-form-section-body-opened{
     display: flex !important;
   }
@@ -115,11 +123,8 @@ menus.
     max-width: 100%;
   }
 
-  &__daext-form-field input[type="text"]:focus,
-  &__daext-form-field input[type="number"]:focus{
-    border-color: $primary-branded-200;
-    box-shadow: $elevation-1;
-    outline: 3px solid $neutral-branded-150;
+  &__daext-form-field input:focus{
+    @include focus-input;
   }
 
   &__daext-form-field input::placeholder{
@@ -142,9 +147,7 @@ menus.
   }
 
   &__daext-form-field textarea:focus{
-    border-color: $primary-branded-200;
-    box-shadow: $elevation-1;
-    outline: 3px solid $neutral-branded-150;
+    @include focus-input;
   }
 
   &__daext-form-field textarea::placeholder{

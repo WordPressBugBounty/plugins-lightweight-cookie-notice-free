@@ -54,7 +54,26 @@ class Daextlwcnf_Tools_Menu_Elements extends Daextlwcnf_Menu_Elements {
 				wp_die( esc_html__( 'You do not have sufficient permissions to access this page.', 'lightweight-cookie-notice-free' ) );
 			}
 
+			// Whether the consent log records are included in the exported file.
+			$include_consent_log = isset( $_POST['include_consent_log'] );
+
+			/**
+			 * Prepare the streaming of the XML file:
+			 *
+			 * - Remove the active output buffers, so that the generated XML is sent to the browser while it's created
+			 * instead of being kept in memory.
+			 * - Remove the time limit (when allowed by the server), since exporting large db tables can take a while.
+			 */
+			while ( ob_get_level() > 0 ) {
+				ob_end_clean();
+			}
+
+			if ( function_exists( 'set_time_limit' ) ) {
+				set_time_limit( 0 );
+			}
+
 			// Generate the header of the XML file.
+			header( 'X-Accel-Buffering: no' );
 			header( 'Content-Encoding: UTF-8' );
 			header( 'Content-type: text/xml; charset=UTF-8' );
 			header( 'Content-Disposition: attachment; filename=lightweight-cookie-notice-' . time() . '.xml' );
@@ -68,7 +87,11 @@ class Daextlwcnf_Tools_Menu_Elements extends Daextlwcnf_Menu_Elements {
 			// Generate the XML of the various db tables.
 			$this->shared->convert_db_table_to_xml( 'section', 'section_id' );
 			$this->shared->convert_db_table_to_xml( 'category', 'category_id' );
-			$this->shared->convert_db_table_to_xml( 'consent_log', 'consent_log_id' );
+
+			if ( $include_consent_log ) {
+				$this->shared->convert_db_table_to_xml( 'consent_log', 'consent_log_id' );
+			}
+
 			$this->shared->convert_db_table_to_xml( 'cookie', 'cookie_id' );
 
 			// Generate the final part of the XML file.
@@ -119,7 +142,7 @@ class Daextlwcnf_Tools_Menu_Elements extends Daextlwcnf_Menu_Elements {
 								<p>
 									<?php
 									esc_html_e(
-										'Click the Export button to generate an XML file that includes all the plugin data.',
+										'Click the Export button to generate an XML file with the plugin data.',
 										'lightweight-cookie-notice-free'
 									);
 									?>
@@ -131,6 +154,18 @@ class Daextlwcnf_Tools_Menu_Elements extends Daextlwcnf_Menu_Elements {
 
 								<!-- the data sent through this form are handled by the export_xml_controller() method called with the WordPress init action -->
 								<form method="POST" action="admin.php?page=<?php echo esc_attr( $this->shared->get( 'slug' ) ); ?>-<?php echo esc_attr( $this->slug_plural ); ?>">
+
+									<?php
+
+									$this->toggle_field(
+										'include_consent_log',
+										__( 'Include the consent log records', 'lightweight-cookie-notice-free' ),
+										__( 'Disable to generate a smaller file without the consent log records.', 'lightweight-cookie-notice-free' ),
+										1,
+										null
+									);
+
+									?>
 
 									<div class="daext-widget-submit">
 										<?php wp_nonce_field( 'daextlwcnf_tools_export', 'daextlwcnf_tools_export' ); ?>

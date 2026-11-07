@@ -22,7 +22,7 @@ Style for the search form displayed in CRUD menus.
     font-weight: 400;
 
     &:focus {
-      outline: $outline;
+      @include focus-input;
     }
 
     &:disabled {

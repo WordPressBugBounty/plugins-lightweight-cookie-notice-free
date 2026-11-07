@@ -1,25 +1,12 @@
-const useState = wp.element.useState;
 import Pagination from '../../../shared-components/pagination/Pagination';
 
-const useMemo = wp.element.useMemo;
 const {__} = wp.i18n;
 import {downloadFileFromString} from '../../../utils/utils';
 
-let PageSize = 10;
-
+/**
+ * Note that the records are paginated on the server, so props.data includes only the records of the current page.
+ */
 const Chart = (props) => {
-
-    //Pagination - START --------------------------------------------------------
-
-    const [currentPage, setCurrentPage] = useState(1);
-
-    const currentTableData = useMemo(() => {
-        const firstPageIndex = (currentPage - 1) * PageSize;
-        const lastPageIndex = firstPageIndex + PageSize;
-        return props.data.slice(firstPageIndex, lastPageIndex);
-    }, [currentPage, props.data]);
-
-    //Pagination - END ----------------------------------------------------------
 
     function handleDataIcon(columnName) {
 
@@ -46,11 +33,23 @@ const Chart = (props) => {
     }
 
     /**
-     * Download the file with the CSV data.
+     * Download the file with the state of the consent log record.
+     *
+     * The state is retrieved from the server only when it's downloaded, since it's not included in the table data.
      */
     function downloadExportFile(row) {
 
-        downloadFileFromString(row.formatted_state, 'consolidated-state' + '-' + row.consent_log_id , 'json');
+        wp.apiFetch({
+            path: '/lightweight-cookie-notice-free/v1/consent-log-state',
+            method: 'POST',
+            data: {
+                consent_log_id: row.consent_log_id
+            }
+        }).then(data => {
+
+            downloadFileFromString(data.formatted_state, 'consolidated-state' + '-' + row.consent_log_id , 'json');
+
+        });
 
     }
 
@@ -83,12 +82,7 @@ const Chart = (props) => {
                 <thead>
                 <tr>
                     <th>
-                        <button
-                            className={'daextlwcnf-react-table__daextlwcnf-sorting-button'}
-                            onClick={props.handleSortingChanges}
-                            value={'consent_id'}
-                            data-icon={handleDataIcon('consent_id')}
-                        >{__('Consent ID', 'lightweight-cookie-notice-free')}</button>
+                        <div className={'daextlwcnf-react-table__daextlwcnf-table-head-label'}>{__('Consent ID', 'lightweight-cookie-notice-free')}</div>
                     </th>
                     <th>
                         <button
@@ -131,12 +125,7 @@ const Chart = (props) => {
                         >{__('URL', 'lightweight-cookie-notice-free')}</button>
                     </th>
                     <th>
-                        <button
-                            className={'daextlwcnf-react-table__daextlwcnf-sorting-button'}
-                            onClick={props.handleSortingChanges}
-                            value={'encrypted_key'}
-                            data-icon={handleDataIcon('encrypted_key')}
-                        >{__('Encrypted Key', 'lightweight-cookie-notice-free')}</button>
+                        <div className={'daextlwcnf-react-table__daextlwcnf-table-head-label'}>{__('Encrypted Key', 'lightweight-cookie-notice-free')}</div>
                     </th>
                     <th>
                         <div className={'daextlwcnf-react-table__daextlwcnf-table-head-label'}>State</div>
@@ -145,7 +134,7 @@ const Chart = (props) => {
                 </thead>
                 <tbody>
 
-                {currentTableData.map((row) => (
+                {props.data.map((row) => (
                     <tr key={row.consent_log_id}>
                         <td>
                             <div className={'table-cell-abbreviated-content'}>
@@ -211,13 +200,13 @@ const Chart = (props) => {
                 className="daextlwcnf-no-data-found">{__('We couldn\'t find any results matching your filters. Try adjusting your criteria.', 'lightweight-cookie-notice-free')}</div>}
             {props.data.length > 0 &&
                 <div className="daextlwcnf-react-table__pagination-container">
-                    <div className='daext-displaying-num'>{props.data.length + ' items'}</div>
+                    <div className='daext-displaying-num'>{props.totalItems + ' items'}</div>
                     <Pagination
                         className="pagination-bar"
-                        currentPage={currentPage}
-                        totalCount={props.data.length}
-                        pageSize={PageSize}
-                        onPageChange={page => setCurrentPage(page)}
+                        currentPage={props.currentPage}
+                        totalCount={props.totalItems}
+                        pageSize={props.itemsPerPage}
+                        onPageChange={props.onPageChange}
                     />
                 </div>
             }

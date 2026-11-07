@@ -27,12 +27,19 @@ class Daextlwcnf_Shared {
 	private $data = array();
 
 	/**
+	 * The accepted and rejected counts of the categories, cached for the current request.
+	 *
+	 * @var array|null
+	 */
+	private $acceptance_rates = null;
+
+	/**
 	 * Constructor.
 	 */
 	private function __construct() {
 
 		$this->data['slug'] = 'daextlwcnf';
-		$this->data['ver']  = '1.21';
+		$this->data['ver']  = '1.22';
 		$this->data['dir']  = substr( plugin_dir_path( __FILE__ ), 0, - 7 );
 		$this->data['url']  = substr( plugin_dir_url( __FILE__ ), 0, - 7 );
 
@@ -197,6 +204,7 @@ class Daextlwcnf_Shared {
 			$this->get( 'slug' ) . '_cookie_path_attribute' => '/',
 			$this->get( 'slug' ) . '_reload_page'          => '0',
 			$this->get( 'slug' ) . '_store_user_consent'   => '1',
+			$this->get( 'slug' ) . '_consent_log_retention' => '0',
 			$this->get( 'slug' ) . '_transient_expiration' => '0',
 			$this->get( 'slug' ) . '_google_font_url'      => 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap',
 			$this->get( 'slug' ) . '_responsive_breakpoint' => '700',
@@ -208,7 +216,6 @@ class Daextlwcnf_Shared {
 			$this->get( 'slug' ) . '_force_css_specificity' => '1',
 			$this->get( 'slug' ) . '_compress_output'      => '1',
 			$this->get( 'slug' ) . '_page_fragment_caching_exception_w3tc' => '0',
-			$this->get( 'slug' ) . '_max_displayed_consent_log_records' => '1000',
 
 		);
 
@@ -727,16 +734,18 @@ class Daextlwcnf_Shared {
 	 */
 	public function remove_last_96_bits( $ipv6 ) {
 
-		// Split the IPv6 address into its parts.
-		$parts = explode( ':', $ipv6 );
+		// Convert the IPv6 address (in full or shortened notation) to its 16-byte binary representation.
+		$ip_binary = inet_pton( $ipv6 );
 
-		// Remove the last 96 bits (3 parts).
-		$trimmed_parts = array_slice( $parts, 0, -3 );
+		if ( false === $ip_binary || strlen( $ip_binary ) !== 16 ) {
+			return 'Unknown';
+		}
 
-		// Reconstruct the IPv6 address.
-		$trimmed_ipv6 = implode( ':', $trimmed_parts );
+		// Keep the first 32 bits (4 bytes) and zero out the last 96 bits (12 bytes).
+		$modified_ip_binary = substr( $ip_binary, 0, 4 ) . str_repeat( "\0", 12 );
 
-		return $trimmed_ipv6;
+		// Convert back to the standard IPv6 notation and return.
+		return inet_ntop( $modified_ip_binary );
 	}
 
 	/**
@@ -752,44 +761,70 @@ class Daextlwcnf_Shared {
 	}
 
 	/**
-	 * Generates the XML version of the data of the table.
+	 * Echoes the XML version of the data of the table.
+	 *
+	 * The records are retrieved in batches using the primary key (keyset pagination), and the XML of each batch is
+	 * sent before retrieving the next one. In this way, the memory used doesn't depend on the number of records of the
+	 * db table, which allows exporting large db tables like the "_consent_log" db table.
 	 *
 	 * @param string $db_table_name The name of the db table without the prefix.
-	 * @param string $db_table_primary_key The name of the primary key of the table
+	 * @param string $db_table_primary_key The name of the primary key of the table.
+	 * @param int    $batch_size The number of records retrieved with each query.
 	 *
-	 * @return string The XML version of the data of the db table.
+	 * @return void
 	 */
-	public function convert_db_table_to_xml( $db_table_name, $db_table_primary_key ) {
+	public function convert_db_table_to_xml( $db_table_name, $db_table_primary_key, $batch_size = 500 ) {
 
-		// Get the data from the db table.
 		global $wpdb;
 
-		// Get the data from the db table.
-		global $wpdb;
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery
-		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared -- $db_table_name is sanitized.
-		$data_a = $wpdb->get_results(
-			'SELECT * FROM ' . $wpdb->prefix . 'daextlwcnf_' . sanitize_key( $db_table_name ) . ' ORDER BY ' . sanitize_key( $db_table_primary_key ) . ' ASC',
-			ARRAY_A
-		);
-		// phpcs:enable
+		$db_table_name_sanitized = $wpdb->prefix . 'daextlwcnf_' . sanitize_key( $db_table_name );
+		$db_table_primary_key    = sanitize_key( $db_table_primary_key );
+		$last_primary_key_value  = 0;
 
-		// Generate the data of the db table.
-		foreach ( $data_a as $record ) {
+		do {
 
-			echo '<' . esc_attr( $db_table_name ) . '>';
+			// Get the next batch of records from the db table.
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $db_table_name_sanitized and $db_table_primary_key are sanitized above.
+			$data_a = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM $db_table_name_sanitized WHERE $db_table_primary_key > %d ORDER BY $db_table_primary_key ASC LIMIT %d",
+					$last_primary_key_value,
+					$batch_size
+				),
+				ARRAY_A
+			);
+			// phpcs:enable
 
-			// Get all the indexes of the $data array.
-			$record_keys = array_keys( $record );
+			// Generate the data of the db table.
+			foreach ( $data_a as $record ) {
 
-			// Cycle through all the indexes of the single record and create all the XML tags.
-			foreach ( $record_keys as $key ) {
-				echo '<' . esc_attr( $key ) . '>' . esc_attr( $record[ $key ] ) . '</' . esc_attr( $key ) . '>';
+				echo '<' . esc_attr( $db_table_name ) . '>';
+
+				// Get all the indexes of the $data array.
+				$record_keys = array_keys( $record );
+
+				// Cycle through all the indexes of the single record and create all the XML tags.
+				foreach ( $record_keys as $key ) {
+					echo '<' . esc_attr( $key ) . '>' . esc_attr( $record[ $key ] ) . '</' . esc_attr( $key ) . '>';
+				}
+
+				echo '</' . esc_attr( $db_table_name ) . '>';
+
+				$last_primary_key_value = intval( $record[ $db_table_primary_key ], 10 );
+
 			}
 
-			echo '</' . esc_attr( $db_table_name ) . '>';
+			$retrieved_records = count( $data_a );
 
-		}
+			// Free the memory used by this batch, including the copy of the results stored by $wpdb.
+			unset( $data_a );
+			$wpdb->flush();
+
+			// Send the generated output to the browser.
+			flush();
+
+		} while ( $retrieved_records === $batch_size );
 	}
 
 	/**
@@ -914,7 +949,7 @@ class Daextlwcnf_Shared {
 
 			// Three Months.
 			case 5:
-				$expiration = 3600 * 2490;
+				$expiration = 3600 * 24 * 90;
 				break;
 
 			// Six Months.
@@ -925,6 +960,11 @@ class Daextlwcnf_Shared {
 			// One Year.
 			case 7:
 				$expiration = 3600 * 24 * 365;
+				break;
+
+			// Unexpected values fall back to the default value of the "Cookie Expiration" option (Unlimited).
+			default:
+				$expiration = 3153600000;
 				break;
 
 		}
@@ -954,6 +994,9 @@ class Daextlwcnf_Shared {
 		// Delete data in 'consent_log' table.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$wpdb->query( "DELETE FROM {$wpdb->prefix}daextlwcnf_consent_log" );
+
+		// Delete the cached acceptance rates of the categories.
+		$this->delete_acceptance_rates_cache();
 	}
 
 	/**
@@ -965,49 +1008,11 @@ class Daextlwcnf_Shared {
 	 */
 	public function get_acceptance_rate_of_category( $category_id ) {
 
-		$accepted = 0;
-		$rejected = 0;
+		$acceptance_rates = $this->get_acceptance_rates();
+		$category_id      = intval( $category_id, 10 );
 
-		global $wpdb;
-
-
-		/**
-		 * Get the consent log data. Note that to prevent the query from being too slow or fail due to memory issues,
-		 * only the last 5000 records are retrieved.
-		 */
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$consent_log_a = $wpdb->get_results(
-			"SELECT * FROM {$wpdb->prefix}daextlwcnf_consent_log ORDER BY consent_log_id DESC LIMIT 5000",
-			ARRAY_A
-		);
-
-		foreach ( $consent_log_a as $consent_log ) {
-
-			// Decode the base64 encoded string.
-			// phpcs:disable WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Base64 decode is required.
-			$compressed_string = base64_decode( $consent_log['state'] );
-
-			// Decompress the string.
-			$original_string = gzuncompress( $compressed_string );
-
-			// Convert the JSON in $result['formatted_state'] to an array.
-			$formatted_state = json_decode( $original_string, true );
-
-			if ( isset( $formatted_state['category_cookies'] ) ) {
-				foreach ( $formatted_state['category_cookies'] as $category_cookie ) {
-
-					if ( intval( $category_id, 10 ) !== intval( $category_cookie['categoryId'], 10 ) ) {
-						continue;
-					}
-
-					if ( 1 === intval( $category_cookie['status'], 10 ) ) {
-						++$accepted;
-					} else {
-						++$rejected;
-					}
-				}
-			}
-		}
+		$accepted = isset( $acceptance_rates[ $category_id ] ) ? $acceptance_rates[ $category_id ]['accepted'] : 0;
+		$rejected = isset( $acceptance_rates[ $category_id ] ) ? $acceptance_rates[ $category_id ]['rejected'] : 0;
 
 		if ( 0 === $accepted && 0 === $rejected ) {
 			$result = 'N/A';
@@ -1017,6 +1022,356 @@ class Daextlwcnf_Shared {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Returns the accepted and rejected counts of all the categories, indexed by category ID.
+	 *
+	 * The consent log records are decoded in a single pass, and the result is cached for the current request and in a
+	 * transient, so that the acceptance rates of all the categories can be displayed without decoding the consent log
+	 * records again for each category.
+	 *
+	 * When a search string is provided, only the consent log records with a URL that includes the search string are
+	 * considered, and the result is not cached.
+	 *
+	 * @param string $search_string The string searched in the URL of the consent log records.
+	 *
+	 * @return array An array in the format [ category_id => [ 'accepted' => int, 'rejected' => int ] ].
+	 */
+	public function get_acceptance_rates( $search_string = '' ) {
+
+		if ( '' !== $search_string ) {
+			return $this->calculate_acceptance_rates( $search_string );
+		}
+
+		if ( null !== $this->acceptance_rates ) {
+			return $this->acceptance_rates;
+		}
+
+		$acceptance_rates = get_transient( 'daextlwcnf_category_acceptance_rates' );
+
+		if ( false === $acceptance_rates ) {
+
+			$acceptance_rates = $this->calculate_acceptance_rates();
+
+			/**
+			 * Cache the result for a short period to avoid decoding the consent log records on every page load while
+			 * keeping the statistics reasonably fresh.
+			 */
+			set_transient( 'daextlwcnf_category_acceptance_rates', $acceptance_rates, 10 * MINUTE_IN_SECONDS );
+
+		}
+
+		$this->acceptance_rates = $acceptance_rates;
+
+		return $acceptance_rates;
+	}
+
+	/**
+	 * Calculates the accepted and rejected counts of all the categories, indexed by category ID, by decoding the
+	 * consent log records.
+	 *
+	 * @param string $search_string The string searched in the URL of the consent log records. When empty, all the
+	 * consent log records are considered.
+	 *
+	 * @return array An array in the format [ category_id => [ 'accepted' => int, 'rejected' => int ] ].
+	 */
+	private function calculate_acceptance_rates( $search_string = '' ) {
+
+		$acceptance_rates = array();
+
+		global $wpdb;
+
+		$where = '';
+		if ( '' !== $search_string ) {
+			$where = $wpdb->prepare( 'WHERE url LIKE %s', '%' . $wpdb->esc_like( $search_string ) . '%' );
+		}
+
+		/**
+		 * Get the consent log data. Note that to prevent the query from being too slow or fail due to memory issues,
+		 * only the last 5000 records are retrieved.
+		 */
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where is prepared.
+		$state_a = $wpdb->get_col(
+			"SELECT state FROM {$wpdb->prefix}daextlwcnf_consent_log $where ORDER BY consent_log_id DESC LIMIT 5000"
+		);
+		// phpcs:enable
+
+		foreach ( $state_a as $state ) {
+
+			// Decode the base64 encoded string.
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Base64 decode is required.
+			$compressed_string = base64_decode( $state );
+
+			// Decompress the string.
+			$original_string = gzuncompress( $compressed_string );
+
+			// Convert the JSON state to an array.
+			$formatted_state = json_decode( $original_string, true );
+
+			if ( ! isset( $formatted_state['category_cookies'] ) || ! is_array( $formatted_state['category_cookies'] ) ) {
+				continue;
+			}
+
+			foreach ( $formatted_state['category_cookies'] as $category_cookie ) {
+
+				$category_id = intval( $category_cookie['categoryId'], 10 );
+
+				if ( ! isset( $acceptance_rates[ $category_id ] ) ) {
+					$acceptance_rates[ $category_id ] = array(
+						'accepted' => 0,
+						'rejected' => 0,
+					);
+				}
+
+				if ( 1 === intval( $category_cookie['status'], 10 ) ) {
+					++$acceptance_rates[ $category_id ]['accepted'];
+				} else {
+					++$acceptance_rates[ $category_id ]['rejected'];
+				}
+			}
+		}
+
+		return $acceptance_rates;
+	}
+
+	/**
+	 * Returns the acceptance rate of all the categories, used in the "Consent Log" menu.
+	 *
+	 * The acceptance rate is calculated on the latest 5000 consent log records, or on the latest 5000 consent log
+	 * records with a URL that includes the search string when a search string is provided.
+	 *
+	 * @param string $search_string The string searched in the URL of the consent log records.
+	 *
+	 * @return string The acceptance rate (for example "65.1%"), or "N/A" when there are no data.
+	 */
+	public function get_overall_acceptance_rate( $search_string = '' ) {
+
+		$accepted = 0;
+		$rejected = 0;
+
+		foreach ( $this->get_acceptance_rates( $search_string ) as $category_acceptance_rate ) {
+			$accepted += $category_acceptance_rate['accepted'];
+			$rejected += $category_acceptance_rate['rejected'];
+		}
+
+		if ( $accepted + $rejected > 0 ) {
+			$acceptance_rate = ( $accepted / ( $accepted + $rejected ) ) * 100;
+			$acceptance_rate = round( $acceptance_rate, 1 ) . '%';
+		} else {
+			$acceptance_rate = 'N/A';
+		}
+
+		return $acceptance_rate;
+	}
+
+	/**
+	 * Delete the cached acceptance rates of the categories.
+	 *
+	 * This method should be called when the consent log records are deleted, so that outdated statistics are not
+	 * displayed.
+	 *
+	 * @return void
+	 */
+	public function delete_acceptance_rates_cache() {
+
+		$this->acceptance_rates = null;
+		delete_transient( 'daextlwcnf_category_acceptance_rates' );
+	}
+
+	/**
+	 * Sanitize the value of the "Consent Log Retention" option.
+	 *
+	 * @param mixed $value The number of months the consent log records are kept, or 0 to keep all the records.
+	 *
+	 * @return int The sanitized value. Values not included in the available choices are converted to 0 (Disabled).
+	 */
+	public function sanitize_consent_log_retention( $value ) {
+
+		$value = intval( $value, 10 );
+
+		return in_array( $value, array( 0, 6, 12, 24, 36 ), true ) ? $value : 0;
+	}
+
+	/**
+	 * Returns the date before which the consent log records are expired, based on the "Consent Log Retention" option.
+	 *
+	 * Note that the dates of the consent log records are stored in UTC, so the returned date is in UTC.
+	 *
+	 * @param bool $read_from_database Whether to read the option from the database instead of the options cache. Used
+	 * by long-running processes to detect changes of the option made by other requests.
+	 *
+	 * @return string|null The date in the 'Y-m-d H:i:s' format, or null if the "Consent Log Retention" option is
+	 * disabled.
+	 */
+	public function get_consent_log_retention_cutoff_date( $read_from_database = false ) {
+
+		$option_name = $this->get( 'slug' ) . '_consent_log_retention';
+
+		if ( $read_from_database ) {
+			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$option_value = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name = %s", $option_name ) );
+		} else {
+			$option_value = get_option( $option_name );
+		}
+
+		$retention_months = $this->sanitize_consent_log_retention( $option_value );
+
+		if ( 0 === $retention_months ) {
+			return null;
+		}
+
+		$cutoff_date = new DateTime( 'now', new DateTimeZone( 'UTC' ) );
+		$cutoff_date->modify( '-' . $retention_months . ' months' );
+
+		return $cutoff_date->format( 'Y-m-d H:i:s' );
+	}
+
+	/**
+	 * Delete the consent log records older than the period defined with the "Consent Log Retention" option.
+	 *
+	 * The records are deleted in batches, so that the db table is not locked for a long time while the consents of the
+	 * visitors are saved. When the deletion doesn't complete within the provided time, the deletion of the remaining
+	 * records is scheduled with WP-Cron.
+	 *
+	 * @param int $max_seconds The maximum time used to delete the records.
+	 *
+	 * @return array An array with the number of deleted records ('deleted') and whether all the expired records have
+	 * been deleted ('completed').
+	 */
+	public function delete_expired_consent_log_records( $max_seconds = 20 ) {
+
+		$cutoff_date = $this->get_consent_log_retention_cutoff_date();
+
+		if ( null === $cutoff_date ) {
+			return array(
+				'deleted'   => 0,
+				'completed' => true,
+			);
+		}
+
+		global $wpdb;
+
+		$batch_size = 1000;
+		$deleted    = 0;
+		$completed  = false;
+		$start_time = microtime( true );
+
+		while ( true ) {
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$result = $wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$wpdb->prefix}daextlwcnf_consent_log WHERE date < %s ORDER BY date ASC LIMIT %d",
+					$cutoff_date,
+					$batch_size
+				)
+			);
+
+			if ( false === $result ) {
+				break;
+			}
+
+			$deleted += $result;
+
+			// All the expired records have been deleted.
+			if ( $result < $batch_size ) {
+				$completed = true;
+				break;
+			}
+
+			if ( microtime( true ) - $start_time >= $max_seconds ) {
+				break;
+			}
+
+			/**
+			 * Read the option again before deleting the next batch, so that a change of the "Consent Log Retention"
+			 * option made while the records are deleted is applied immediately. When the option is disabled, the
+			 * deletion stops.
+			 */
+			$cutoff_date = $this->get_consent_log_retention_cutoff_date( true );
+
+			if ( null === $cutoff_date ) {
+				$completed = true;
+				break;
+			}
+		}
+
+		// Delete the remaining expired records in a few minutes.
+		if ( ! $completed && ! wp_next_scheduled( 'daextlwcnf_delete_expired_consent_log_records_single' ) ) {
+			wp_schedule_single_event( time() + 5 * MINUTE_IN_SECONDS, 'daextlwcnf_delete_expired_consent_log_records_single' );
+		}
+
+		// Delete the cached data that depend on the consent log records.
+		if ( $deleted > 0 ) {
+			$this->delete_acceptance_rates_cache();
+			delete_transient( 'daextlwcnf_consent_log_count' );
+		}
+
+		return array(
+			'deleted'   => $deleted,
+			'completed' => $completed,
+		);
+	}
+
+	/**
+	 * Schedule the daily deletion of the expired consent log records with WP-Cron, if not already scheduled.
+	 *
+	 * Note that the scheduled event runs even when the "Consent Log Retention" option is disabled, in which case it
+	 * doesn't delete any record.
+	 *
+	 * @return void
+	 */
+	public function schedule_consent_log_retention() {
+
+		if ( ! wp_next_scheduled( 'daextlwcnf_delete_expired_consent_log_records' ) ) {
+			wp_schedule_event( time(), 'daily', 'daextlwcnf_delete_expired_consent_log_records' );
+		}
+	}
+
+	/**
+	 * Schedule the deletion of the expired consent log records right after the "Consent Log Retention" option is
+	 * changed, so that the new retention period is applied without waiting for the daily deletion.
+	 *
+	 * This method is called with the "update_option_daextlwcnf_consent_log_retention" action.
+	 *
+	 * @param mixed $old_value The previous value of the option.
+	 * @param mixed $value The new value of the option.
+	 *
+	 * @return void
+	 */
+	public function schedule_consent_log_retention_after_update( $old_value, $value ) {
+
+		if ( 0 === $this->sanitize_consent_log_retention( $value ) ) {
+			return;
+		}
+
+		if ( ! wp_next_scheduled( 'daextlwcnf_delete_expired_consent_log_records_single' ) ) {
+			wp_schedule_single_event( time(), 'daextlwcnf_delete_expired_consent_log_records_single' );
+		}
+	}
+
+	/**
+	 * Remove the scheduled deletions of the expired consent log records.
+	 *
+	 * @return void
+	 */
+	public function unschedule_consent_log_retention() {
+
+		wp_clear_scheduled_hook( 'daextlwcnf_delete_expired_consent_log_records' );
+		wp_clear_scheduled_hook( 'daextlwcnf_delete_expired_consent_log_records_single' );
+	}
+
+	/**
+	 * Callback of the WP-Cron events used to delete the expired consent log records.
+	 *
+	 * @return void
+	 */
+	public function run_scheduled_consent_log_retention() {
+
+		$this->delete_expired_consent_log_records();
 	}
 
 	/**
@@ -2701,6 +3056,38 @@ class Daextlwcnf_Shared {
 								'help'    => __( 'Store the user consent data in a dedicated log.', 'lightweight-cookie-notice-free' ),
 							),
 							array(
+								'name'          => 'daextlwcnf_consent_log_retention',
+								'label'         => __( 'Consent Log Retention', 'lightweight-cookie-notice-free' ),
+								'type'          => 'select',
+								'tooltip'       => __(
+									'The consent log records older than the selected period are permanently deleted. The deletion runs right after this option is saved, and then once a day. To keep a copy of the consent log, export it with the "Tools" menu before selecting a period. Select "Disabled" to keep all the consent log records.',
+									'lightweight-cookie-notice-free'
+								),
+								'help'          => __( 'Set how long the consent log records are kept.', 'lightweight-cookie-notice-free' ),
+								'selectOptions' => array(
+									array(
+										'value' => '0',
+										'text'  => __( 'Disabled', 'lightweight-cookie-notice-free' ),
+									),
+									array(
+										'value' => '6',
+										'text'  => __( 'Six Months', 'lightweight-cookie-notice-free' ),
+									),
+									array(
+										'value' => '12',
+										'text'  => __( 'One Year', 'lightweight-cookie-notice-free' ),
+									),
+									array(
+										'value' => '24',
+										'text'  => __( 'Two Years', 'lightweight-cookie-notice-free' ),
+									),
+									array(
+										'value' => '36',
+										'text'  => __( 'Three Years', 'lightweight-cookie-notice-free' ),
+									),
+								),
+							),
+							array(
 								'name'      => 'daextlwcnf_transient_expiration',
 								'label'     => __( 'Transient Expiration', 'lightweight-cookie-notice-free' ),
 								'type'      => 'range',
@@ -2722,19 +3109,6 @@ class Daextlwcnf_Shared {
 									'lightweight-cookie-notice-free'
 								),
 								'help'    => __( 'Use the Page Fragment Caching Exception feature of the W3 Total Cache plugin.', 'lightweight-cookie-notice-free' ),
-							),
-							array(
-								'name'      => 'daextlwcnf_max_displayed_consent_log_records',
-								'label'     => __( 'Consent Log Records', 'lightweight-cookie-notice-free' ),
-								'type'      => 'range',
-								'tooltip'   => __(
-									'The maximum number of consent log records displayed in the "Consent Log" menu.',
-									'lightweight-cookie-notice-free'
-								),
-								'help'      => __( 'Set the maximum number of consent log records displayed in the "Consent Log" menu.', 'lightweight-cookie-notice-free' ),
-								'rangeMin'  => 1000,
-								'rangeMax'  => 1000000,
-								'rangeStep' => 1000,
 							),
 						),
 					),
@@ -3818,18 +4192,18 @@ class Daextlwcnf_Shared {
 	}
 
 	/**
-	 * Display the dismissible notices stored in the "daim_dismissible_notice_a" option.
+	 * Display the dismissible notices stored in the "daextlwcnf_dismissible_notice_a" option.
 	 *
 	 * Note that the dismissible notice will be displayed only once to the user.
 	 *
 	 * The dismissable notice is first displayed (only to the same user with which has been generated) and then it is
-	 * removed from the "daim_dismissible_notice_a" option.
+	 * removed from the "daextlwcnf_dismissible_notice_a" option.
 	 *
 	 * @return void
 	 */
 	public function display_dismissible_notices() {
 
-		$dismissible_notice_a = get_option( 'daim_dismissible_notice_a' );
+		$dismissible_notice_a = get_option( 'daextlwcnf_dismissible_notice_a' );
 
 		// Iterate over the dismissible notices with the user id of the same user.
 		if ( is_array( $dismissible_notice_a ) ) {
@@ -3849,10 +4223,10 @@ class Daextlwcnf_Shared {
 
 					<?php
 
-					// Remove the echoed dismissible notice from the "daim_dismissible_notice_a" WordPress option.
+					// Remove the echoed dismissible notice from the "daextlwcnf_dismissible_notice_a" WordPress option.
 					unset( $dismissible_notice_a[ $key ] );
 
-					update_option( 'daim_dismissible_notice_a', $dismissible_notice_a );
+					update_option( 'daextlwcnf_dismissible_notice_a', $dismissible_notice_a );
 
 				}
 			}
@@ -3860,7 +4234,7 @@ class Daextlwcnf_Shared {
 	}
 
 	/**
-	 * Save a dismissible notice in the "daim_dismissible_notice_a" WordPress.
+	 * Save a dismissible notice in the "daextlwcnf_dismissible_notice_a" WordPress.
 	 *
 	 * @param string $message The message of the dismissible notice.
 	 * @param string $element_class The class of the dismissible notice.
@@ -3876,7 +4250,7 @@ class Daextlwcnf_Shared {
 		);
 
 		// Get the current option value.
-		$dismissible_notice_a = get_option( 'daim_dismissible_notice_a' );
+		$dismissible_notice_a = get_option( 'daextlwcnf_dismissible_notice_a' );
 
 		// If the option is not an array, initialize it as an array.
 		if ( ! is_array( $dismissible_notice_a ) ) {
@@ -3886,8 +4260,8 @@ class Daextlwcnf_Shared {
 		// Add the dismissible notice to the array.
 		$dismissible_notice_a[] = $dismissible_notice;
 
-		// Save the dismissible notice in the "daim_dismissible_notice_a" WordPress option.
-		update_option( 'daim_dismissible_notice_a', $dismissible_notice_a );
+		// Save the dismissible notice in the "daextlwcnf_dismissible_notice_a" WordPress option.
+		update_option( 'daextlwcnf_dismissible_notice_a', $dismissible_notice_a );
 	}
 
 	/**
@@ -3899,46 +4273,6 @@ class Daextlwcnf_Shared {
 	 */
 	public function esc_csv( $content ) {
 		return str_replace( '"', '""', $content );
-	}
-
-	/**
-	 * Iterate the $results array and find the acceptance rate of the categories.
-	 *
-	 * @param array $results The consent log records.
-	 *
-	 * @return float The acceptance rate of the categories.
-	 */
-	public function get_acceptance_rate( $results ) {
-
-		// Init variables.
-		$accepted = 0;
-		$rejected = 0;
-
-		// Iterate the $results array.
-		foreach ( $results as $key => $result ) {
-
-			// Convert the JSON in $result['formatted_state'] to an array.
-			$formatted_state = json_decode( $result->formatted_state, true );
-
-			if ( isset( $formatted_state['category_cookies'] ) ) {
-				foreach ( $formatted_state['category_cookies'] as $category_cookie ) {
-					if ( 1 === intval( $category_cookie['status'], 10 ) ) {
-						++$accepted;
-					} else {
-						++$rejected;
-					}
-				}
-			}
-		}
-
-		if ( $accepted + $rejected > 0 ) {
-			$acceptance_rate = ( $accepted / ( $accepted + $rejected ) ) * 100;
-			$acceptance_rate = round( $acceptance_rate, 1 ). '%';
-		} else {
-			$acceptance_rate = 'N/A';
-		}
-
-		return $acceptance_rate;
 	}
 
 	/**

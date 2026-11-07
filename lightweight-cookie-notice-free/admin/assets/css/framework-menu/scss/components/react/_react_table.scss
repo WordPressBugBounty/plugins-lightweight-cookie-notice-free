@@ -19,7 +19,7 @@ Note that this section is composed by the following sub-sections:
   display: flex;
   flex-direction: column;
   border: 1px solid $neutral-grey-200;
-  background: #fff;
+  background: $neutral-grey-0;
   border-radius: $radius-lg;
 
   /* Statistics and Tools section - Start --------------------------------------- */
@@ -50,6 +50,10 @@ Note that this section is composed by the following sub-sections:
     border-radius: $radius-md;
     color: $neutral-branded-700;
     margin: 0;
+
+    &:focus {
+      @include focus-input;
+    }
   }
 
   & .daextlwcnf-react-table-header{
@@ -93,6 +97,10 @@ Note that this section is composed by the following sub-sections:
     display: flex;
     align-items: center;
     gap: 8px;
+
+    &:focus{
+        @include focus-ring;
+    }
   }
 
   & .daextlwcnf-react-table-header .tools-actions button[disabled]{
@@ -162,6 +170,11 @@ Note that this section is composed by the following sub-sections:
 
   &__daextlwcnf-data-table &__post-cell-container a{
     text-decoration: none;
+    color: $ui-primary-700 !important;
+  }
+
+  &__daextlwcnf-data-table &__post-cell-container a:hover{
+    color: $ui-primary-900 !important;
   }
 
   &__icon-link:focus:nth-of-type(2){
@@ -370,7 +383,7 @@ Note that this section is composed by the following sub-sections:
   &__daextlwcnf-data-table .small-button{
     height: 26px;
     padding: 3px 8px;
-    background: $primary-branded-300;
+    background: $ui-primary-600;
     border-radius: $radius-sm;
     font-size: $fs-3;
     line-height: 20px;
@@ -382,7 +395,7 @@ Note that this section is composed by the following sub-sections:
   }
 
   &__daextlwcnf-data-table .small-button:hover{
-    background: $primary-branded-400;
+    background: $ui-primary-700;
   }
 
   &__http-status-pill{
@@ -395,16 +408,16 @@ Note that this section is composed by the following sub-sections:
   &__http-status-color-group-1xx-informational-responses,
   &__http-status-color-group-3xx-redirection-messages,
   &__http-status-color-group-unknown{
-    background: #787878;
+    background: $neutral-branded-400;
   }
 
   &__http-status-color-group-2xx-successful-responses,
   &__http-status-color-group-5xx-server-error-responses{
-    background: #418548;
+    background: $success-300;
   }
 
   &__http-status-color-group-4xx-client-error-responses{
-    background: #d94838;
+    background: $error-300;
   }
 
   & .juice-relative-wrapper{
@@ -421,7 +434,7 @@ Note that this section is composed by the following sub-sections:
   }
 
   & .juice-relative{
-    background: $primary-branded-200;
+    background: $ui-primary-600;
     height: 16px;
   }
 
@@ -476,7 +489,7 @@ Note that this section is composed by the following sub-sections:
 
   &__pagination-container .pagination-item.selected{
     background: $neutral-branded-50;
-    color: $primary-wordpress-100;
+    color: $ui-primary-600;
   }
 
   &__pagination-container .pagination-item:first-child {
@@ -535,7 +548,7 @@ Note that this section is composed by the following sub-sections:
   }
 
   &__pagination-container .pagination-item svg path{
-    stroke: $primary-wordpress-400;
+    stroke: $ui-primary-700;
   }
 
   &__pagination-container .pagination-item.disabled svg path{
@@ -549,9 +562,11 @@ Note that this section is composed by the following sub-sections:
 
   & .daextlwcnf-back-button{
     cursor: pointer;
+    color: $ui-primary-700;
   }
 
   & .daextlwcnf-back-button:hover{
+    color: $ui-primary-900;
 
   }
 
@@ -590,4 +605,10 @@ Note that this section is composed by the following sub-sections:
 
   }
 
+}
+/* Dim the table while the records of a page, a sorting, or a search are loaded. */
+.daextlwcnf-react-table--refreshing .daextlwcnf-data-table-container{
+  opacity: 0.6;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
 }

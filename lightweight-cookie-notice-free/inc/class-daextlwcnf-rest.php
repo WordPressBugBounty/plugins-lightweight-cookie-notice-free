@@ -93,6 +93,17 @@ class Daextlwcnf_Rest {
 			)
 		);
 
+		// Add the POST 'lightweight-cookie-notice-free/v1/consent-log-state/' endpoint to the Rest API.
+		register_rest_route(
+			'lightweight-cookie-notice-free/v1',
+			'/consent-log-state/',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'rest_api_daext_lightweight_cookie_notice_read_consent_log_state_callback' ),
+				'permission_callback' => array( $this, 'rest_api_daext_lightweight_cookie_notice_read_statistics_callback_permission_check' ),
+			)
+		);
+
 		/**
 		 * Add the GET 'lightweight-cookie-notice-free/v1/nonce' endpoint to the Rest API.
 		 * This endpoint is intentionally public and unauthenticated so that cached pages can
@@ -180,7 +191,7 @@ class Daextlwcnf_Rest {
 		$options['daextlwcnf_cookie_notice_button_3_url']          = $request->get_param( 'daextlwcnf_cookie_notice_button_3_url' ) !== null ? esc_url_raw( $request->get_param( 'daextlwcnf_cookie_notice_button_3_url' ) ) : null;
 		$options['daextlwcnf_cookie_notice_button_dismiss_action'] = $request->get_param( 'daextlwcnf_cookie_notice_button_dismiss_action' ) !== null ? intval( $request->get_param( 'daextlwcnf_cookie_notice_button_dismiss_action' ), 10 ) : null;
 		$options['daextlwcnf_cookie_notice_button_dismiss_url']    = $request->get_param( 'daextlwcnf_cookie_notice_button_dismiss_url' ) !== null ? esc_url_raw( $request->get_param( 'daextlwcnf_cookie_notice_button_dismiss_url' ) ) : null;
-		$options['daextlwcnf_cookie_notice_shake_effect']          = $request->get_param( '_cookie_notice_shake_effect' ) !== null ? intval( $request->get_param( '_cookie_notice_shake_effect' ), 10 ) : null;
+		$options['daextlwcnf_cookie_notice_shake_effect']          = $request->get_param( 'daextlwcnf_cookie_notice_shake_effect' ) !== null ? intval( $request->get_param( 'daextlwcnf_cookie_notice_shake_effect' ), 10 ) : null;
 
 		// Cookie Settings - Section --------------------------------------------------------------------------------------.
 		$options['daextlwcnf_cookie_settings_logo_url']           = $request->get_param( 'daextlwcnf_cookie_settings_logo_url' ) !== null ? esc_url_raw( $request->get_param( 'daextlwcnf_cookie_settings_logo_url' ) ) : null;
@@ -311,9 +322,9 @@ class Daextlwcnf_Rest {
 		$options['daextlwcnf_test_mode']                            = $request->get_param( 'daextlwcnf_test_mode' ) !== null ? intval( $request->get_param( 'daextlwcnf_test_mode' ), 10 ) : null;
 		$options['daextlwcnf_reload_page']                          = $request->get_param( 'daextlwcnf_reload_page' ) !== null ? intval( $request->get_param( 'daextlwcnf_reload_page' ), 10 ) : null;
 		$options['daextlwcnf_store_user_consent']                   = $request->get_param( 'daextlwcnf_store_user_consent' ) !== null ? intval( $request->get_param( 'daextlwcnf_store_user_consent' ), 10 ) : null;
+		$options['daextlwcnf_consent_log_retention']                = $request->get_param( 'daextlwcnf_consent_log_retention' ) !== null ? $this->shared->sanitize_consent_log_retention( $request->get_param( 'daextlwcnf_consent_log_retention' ) ) : null;
 		$options['daextlwcnf_transient_expiration']                 = $request->get_param( 'daextlwcnf_transient_expiration' ) !== null ? intval( $request->get_param( 'daextlwcnf_transient_expiration' ), 10 ) : null;
 		$options['daextlwcnf_page_fragment_caching_exception_w3tc'] = $request->get_param( 'daextlwcnf_page_fragment_caching_exception_w3tc' ) !== null ? intval( $request->get_param( 'daextlwcnf_page_fragment_caching_exception_w3tc' ), 10 ) : null;
-		$options['daextlwcnf_max_displayed_consent_log_records'] = $request->get_param( 'daextlwcnf_max_displayed_consent_log_records' ) !== null ? intval( $request->get_param( 'daextlwcnf_max_displayed_consent_log_records' ), 10 ) : null;
 
 		// Content - Section --------------------------------------------------------------------------------------.
 		$options['daextlwcnf_google_font_url']       = $request->get_param( 'daextlwcnf_google_font_url' ) !== null ? sanitize_text_field( $request->get_param( 'daextlwcnf_google_font_url' ) ) : null;
@@ -375,8 +386,9 @@ class Daextlwcnf_Rest {
 
 			// Use the provided form data.
 			$search_string  = sanitize_text_field( $request->get_param( 'search_string' ) );
-			$sorting_column = sanitize_text_field( $request->get_param( 'sorting_column' ) );
-			$sorting_order  = sanitize_text_field( $request->get_param( 'sorting_order' ) );
+			$sorting_column = sanitize_key( $request->get_param( 'sorting_column' ) );
+			$sorting_order  = sanitize_key( $request->get_param( 'sorting_order' ) );
+			$current_page   = max( 1, intval( $request->get_param( 'current_page' ), 10 ) );
 
 		} else {
 
@@ -384,128 +396,148 @@ class Daextlwcnf_Rest {
 			$search_string  = '';
 			$sorting_column = 'date';
 			$sorting_order  = 'desc';
+			$current_page   = 1;
+
+			// Recalculate the acceptance rate when the metrics are updated.
+			$this->shared->delete_acceptance_rates_cache();
 
 		}
 
-		// Create the WHERE part of the query based on the $optimization_status value.
+		/**
+		 * Only the columns that can be sorted efficiently and in a meaningful way are allowed. The "consent_log_id"
+		 * column is used as a secondary sorting column to keep the order of the records with the same value stable
+		 * between pages.
+		 */
+		$sortable_columns = array( 'date', 'anonymized_user_ip', 'country_code', 'user_agent', 'url' );
+		if ( ! in_array( $sorting_column, $sortable_columns, true ) ) {
+			$sorting_column = 'date';
+		}
+		$sorting_order = 'asc' === $sorting_order ? 'ASC' : 'DESC';
+		$order_by      = "ORDER BY $sorting_column $sorting_order, consent_log_id $sorting_order";
+
 		global $wpdb;
-		$filter = '';
 
-		// Create the WHERE part of the string based on the $search_string value.
+		// Create the WHERE part of the query based on the $search_string value.
+		$where      = '';
+		$index_hint = '';
 		if ( '' !== $search_string ) {
-			if ( strlen( $filter ) === 0 ) {
-				$filter .= $wpdb->prepare( 'WHERE (url LIKE %s)', '%' . $search_string . '%' );
-			} else {
-				$filter .= $wpdb->prepare( ' AND (url LIKE %s)', '%' . $search_string . '%' );
+			$where = $wpdb->prepare( 'WHERE url LIKE %s', '%' . $wpdb->esc_like( $search_string ) . '%' );
 
+			/**
+			 * When searching, the index on the "date" column is ignored. With this index, MySQL reads the records in
+			 * date order until it finds the records of the current page, which is very slow when few records match the
+			 * search (all the records are read one by one). Without it, the matching records are sorted with a
+			 * single table scan, which takes a predictable time.
+			 *
+			 * The hint is used only when the index exists (database version 6), since MySQL returns an error when an
+			 * ignored index doesn't exist. This can happen when the index couldn't be created during the update.
+			 */
+			if ( intval( get_option( $this->shared->get( 'slug' ) . '_database_version' ), 10 ) >= 6 ) {
+				$index_hint = 'IGNORE INDEX (date)';
 			}
 		}
 
-		// Create the ORDER BY part of the query based on the $sorting_column and $sorting_order values.
-		if ( '' !== $sorting_column ) {
-			$filter .= ' ORDER BY ' . sanitize_key( $sorting_column );
-		} else {
-			$filter .= ' ORDER BY date';
+		// Get the number of records that match the search.
+		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where is prepared and $order_by is built from allowed values.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery
+		$total_items = intval( $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}daextlwcnf_consent_log $where" ), 10 );
+
+		// Keep the current page within the available pages.
+		$items_per_page = 10;
+		$current_page   = min( $current_page, max( 1, (int) ceil( $total_items / $items_per_page ) ) );
+
+		/**
+		 * Get the records of the current page.
+		 *
+		 * The IDs of the records of the current page are retrieved first with a subquery that reads only the sorting
+		 * columns (which uses the index on the "date" column), then only these records are retrieved. This avoids
+		 * sorting the full records, which is slow with large db tables. Note that the "state" column is not retrieved,
+		 * since the state of a record is retrieved only when it's downloaded.
+		 */
+		$records = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT consent_log.consent_log_id, consent_id, anonymized_user_ip, date, user_agent, url, encrypted_key, country_code
+				FROM {$wpdb->prefix}daextlwcnf_consent_log AS consent_log
+				INNER JOIN (
+					SELECT consent_log_id FROM {$wpdb->prefix}daextlwcnf_consent_log $index_hint $where $order_by LIMIT %d OFFSET %d
+				) AS page USING (consent_log_id)
+				$order_by",
+				$items_per_page,
+				( $current_page - 1 ) * $items_per_page
+			)
+		);
+		// phpcs:enable
+
+		/**
+		 * Add the formatted date (based on the date format defined in the WordPress settings) to the records.
+		 */
+		foreach ( $records as $record ) {
+			$record->formatted_date = mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $record->date );
 		}
 
-		if ( 'desc' === $sorting_order ) {
-			$filter .= ' DESC';
-		} else {
-			$filter .= ' ASC';
-		}
-
-		// Get the data from the "_archive" db table using $wpdb and put them in the $response array.
-
-		$offset = 0;
-		$limit = 100; // Set the limit to 100 records per iteration.
-		$max = intval(get_option($this->shared->get( 'slug' ) . '_max_displayed_consent_log_records'), 10); // Set the maximum number of records to fetch.
-		$all_requests = array(); // Initialize an array to hold all requests.
-
-		// Attempt to increase the memory limit.
-		wp_raise_memory_limit();
-
-		do {
-
-			// Fetch the records in batches of 100.
-
-			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $filter is prepared.
-			// phpcs:disable WordPress.DB.DirectDatabaseQuery
-			$requests = $wpdb->get_results(
-				$wpdb->prepare(
-					"SELECT consent_log_id, anonymized_user_ip, date, user_agent, url, encrypted_key, country_code, state, consent_id FROM {$wpdb->prefix}daextlwcnf_consent_log $filter LIMIT %d OFFSET %d",
-					$limit,
-					$offset
-				)
-			);
-			// phpcs:enable
-
-			if ( is_array( $requests ) && count( $requests ) > 0 ) {
-
-				foreach ( $requests as $key => $request ) {
-
-					/**
-					 * Add the formatted date (based on the date format defined in the WordPress settings) to the $requests
-					 * array.
-					 */
-					$request->formatted_date = mysql2date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $request->date );
-
-					/**
-					 * Decode, decompress, and truncate the state string for display purposes. -----------------------------
-					 */
-
-					// Decode the base64 encoded string.
-					// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Base64 decode is required.
-					$compressed_string = base64_decode( $request->state );
-
-					// Decompress the string.
-					$original_string = gzuncompress( $compressed_string );
-
-					// Truncate the $original_string var for display purposes.
-					$request->formatted_state           = $original_string;
-					$request->formatted_state_truncated = substr( $original_string, 0, 100 ) . '...';
-
-					// Append the processed request to the all_requests array.
-					$all_requests[] = $request;
-
-				}
-
-				// Increase the offset for the next batch.
-				$offset += $limit;
-
-				// Exit if the maximum number of records has been reached.
-				if($offset >= $max) {
-					break;
-				}
-
-			}
-
-		} while ( count( $requests ) > 0 );
-
-		if ( count( $all_requests ) > 0 ) {
-
-			$response = array(
-				'statistics' => array(
-					'all_records'     => count( $all_requests ),
-					'acceptance_rate' => $this->shared->get_acceptance_rate( $all_requests ),
-				),
-				'table'      => $all_requests,
-			);
-
-
-		} else {
-
-			$response = array(
-				'statistics' => array(
-					'all_records'     => 0,
-					'acceptance_rate' => 'N/A',
-				),
-				'table'      => array(),
-			);
-
-		}
+		$response = array(
+			'statistics' => array(
+				'all_records'     => $total_items,
+				'acceptance_rate' => $this->shared->get_overall_acceptance_rate( $search_string ),
+			),
+			'table'      => $records,
+			'pagination' => array(
+				'current_page'   => $current_page,
+				'items_per_page' => $items_per_page,
+				'total_items'    => $total_items,
+			),
+		);
 
 		// Prepare the response.
 		$response = new WP_REST_Response( $response );
+
+		return $response;
+	}
+
+	/**
+	 * Callback for the POST 'lightweight-cookie-notice-free/v1/consent-log-state' endpoint of the Rest API.
+	 *
+	 * This method is in the following contexts:
+	 *
+	 * - In the "Consent Log" menu, to download the state of a single consent log record.
+	 *
+	 * @param object $request The request data.
+	 *
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function rest_api_daext_lightweight_cookie_notice_read_consent_log_state_callback( $request ) {
+
+		$consent_log_id = intval( $request->get_param( 'consent_log_id' ), 10 );
+
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$state = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT state FROM {$wpdb->prefix}daextlwcnf_consent_log WHERE consent_log_id = %d",
+				$consent_log_id
+			)
+		);
+
+		if ( null === $state ) {
+			return new WP_Error(
+				'rest_not_found',
+				'The consent log record does not exist.',
+				array( 'status' => 404 )
+			);
+		}
+
+		// Decode the base64 encoded string and decompress it.
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- Base64 decode is required.
+		$formatted_state = gzuncompress( base64_decode( $state ) );
+
+		// Prepare the response.
+		$response = new WP_REST_Response(
+			array(
+				'consent_log_id'  => $consent_log_id,
+				'formatted_state' => false !== $formatted_state ? $formatted_state : '',
+			)
+		);
 
 		return $response;
 	}

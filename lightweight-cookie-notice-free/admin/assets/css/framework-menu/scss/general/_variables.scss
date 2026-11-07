@@ -1,6 +1,7 @@
 /* Colors ----------------------------------------------------------------------------------------------------------- */
 
-/* Neutral Colors */
+/* Neutral Colors - Branded color not present in the DAEXT brand colors but created for this UI
+ based on the DAEXT brand colors */
 
 $neutral-branded-50: #F9FAFA;
 $neutral-branded-100: #F3F6FC;
@@ -14,9 +15,10 @@ $neutral-branded-600: #475566;
 $neutral-branded-700: #344255;
 $neutral-branded-800: #1D283A;
 
-/* Neutral Grey Colors */
+/* Neutral Grey Colors - Neutral grey colors necessary for the back-end UI. */
 $neutral-grey-0: #FFFFFF;
 $neutral-grey-100: #FDFDFD;
+$neutral-grey-150: #f0f0f1;
 $neutral-grey-200: #E5E5E5;
 $neutral-grey-300: #DDDDDD;
 $neutral-grey-400: #D3D3D3;
@@ -24,29 +26,47 @@ $neutral-grey-500: #CCCCCC;
 $neutral-grey-600: #333333;
 $neutral-grey-700: #000000;
 
-/* Primary WordPress Colors */
-$primary-wordpress: #0783BE;
+/* Primary Brand Colors - Colors from the official DAEXT brand colors
+These colors are not currently used directly in the plugin UI but they might be in the future, and they are used on
+daext.com and in the DAEXT theme, so we define them here for consistency and potential future use. The plugin's primary
+UI colors are instead derived from this palette but with reduced saturation and increased lightness to better suit the
+dense WordPress admin context. Note that the variable names color-style-primary-500, color-style-primary-600, etc.
+reflect the names used in the DAEXT design system and in the DAEXT theme used in daext.com, while the ui-primary-500,
+ui-primary-600, etc. variables are the plugin-specific primary UI colors that are actually used in the plugin admin
+interface. */
+$color-style-primary-500: #218DE6;
+$color-style-primary-600: #1E80D9;
+$color-style-primary-700: #196EC6;
+$color-style-primary-800: #145DB4;
+$color-style-primary-900: #114D97;
+$ui-primary-500: $color-style-primary-500;
+$ui-primary-600: $color-style-primary-600;
+$ui-primary-700: $color-style-primary-700;
+$ui-primary-800: $color-style-primary-800;
+$ui-primary-900: $color-style-primary-900;
 
-$primary-wordpress-100: #0783BE;
-$primary-wordpress-200: #0073AA;
-$primary-wordpress-300: #0075A5;
-$primary-wordpress-400: #066FA1;
-$primary-wordpress-500: #066998;
-$primary-wordpress-600: #044767;
+/* Primary UI Colors — Plugin-specific subset derived from the DAEXT brand blue scale.
+ * Shares the DAEXT brand hue (210°) but uses reduced saturation and increased lightness
+ * compared to the full brand palette, bringing the visual weight closer to the legacy
+ * WordPress admin blues that previously defined the plugin UI (pre 7.0 admin colors). This subset is intentionally
+ * distinct from the brand colors used on daext.com — it is tuned for daily use in a dense
+ * WordPress admin context where high-saturation blues read as too aggressive. */
+//$ui-primary-500: #2A93D5;
+//$ui-primary-600: #2281C2;
+//$ui-primary-700: #2179B8;
+//$ui-primary-800: #1C6AA4;
+//$ui-primary-900: #165888;
 
-/* Primary Branded Colors */
-$primary-branded-100: #218DE6;
-$primary-branded-200: #1E80D9;
-$primary-branded-300: #1E80D9;
-$primary-branded-400: #196EC6;
-$primary-branded-500: #2A3A51;
+/* Neutrals - Colors from the official DAEXT brand colors */
+$color-style-neutral-50:  #F6F7F8;
+
+/* Primary Branded Colors - Colors from the official DAEXT brand colors */
+$primary-branded-500: #2A3A51; // dark navy — toolbar/section bg; matches $color-style-post-thumbnail-400 in DAEXT theme
 
 /* Accented Colors */
 $accented-100: #DBDBFF;
 $accented-200: #7070FE;
 $accented-300: #4F4FD0;
-
-
 
 /* Success Colors */
 $success-100: #F0F7F1;
@@ -86,3 +106,36 @@ $fs-7: 21px;
 $spacer-sm: 8px;
 $spacer-md: 12px;
 $spacer-lg: 24px;
+
+/* Focus Mixins --------------------------------------------------------------------------------------------------------- */
+
+/* Applied to filled (solid background) buttons. Removes the browser outline and renders
+ * a 1px white spacer ring immediately around the button surface followed by a 3px branded
+ * blue outer ring. The white gap prevents the blue ring from blending into the button
+ * background. Forces text color to white to override WordPress core styles that would
+ * otherwise change the button text color on focus. */
+@mixin focus-filled {
+  color: $neutral-grey-0;
+  outline: none;
+  box-shadow: 0 0 0 1px $neutral-grey-0, 0 0 0 3px $ui-primary-600;
+}
+
+/* Applied to outlined/secondary buttons, text links, and pagination links on light
+ * backgrounds. Removes the browser outline and renders the same 1px white spacer ring
+ * plus 3px branded blue outer ring as focus-filled. The white spacer creates clean
+ * separation between the element border and the outer ring even on light surfaces. */
+@mixin focus-ring {
+  outline: none !important;
+  box-shadow: 0 0 0 1px $neutral-grey-0, 0 0 0 3px $ui-primary-600 !important;
+}
+
+/* Applied to text inputs, textareas, and select controls (native, Select2, and
+ * react-select). Removes the browser outline, shifts the element's own border-color
+ * to the branded blue, and adds a tight 1px same-color box-shadow that reinforces
+ * the border. Produces a thickened border effect rather than a floating ring,
+ * signalling active data entry rather than an action trigger. */
+@mixin focus-input {
+  outline: none !important;
+  border-color: $ui-primary-600 !important;
+  box-shadow: 0 0 0 1px $ui-primary-600 !important;
+}

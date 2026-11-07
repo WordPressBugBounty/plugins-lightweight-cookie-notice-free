@@ -2,39 +2,54 @@
 /* UI Elements - Start -------------------------------------------------------------------- */
 
 .daextlwcnf-button{
-  background: $primary-wordpress-100;
+  background: $ui-primary-600;
   color: $neutral-grey-0;
   height: 22px;
   line-height: 22px;
   padding: 4px 12px;
-  border: 1px solid rgba($neutral-branded-800, 0.2);
+  border: 1px solid $ui-primary-700;
   font-size: $fs-2;
   border-radius: $radius-md;
   text-decoration: none;
-  transition: all 0.2s ease-in-out;
-  transition-property: background, border, box-shadow;
+  transition: background 0.2s ease-in-out, border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .daextlwcnf-button:hover{
-  background: $primary-wordpress-500;
+  background: $ui-primary-700;
   color: $neutral-grey-0;
+}
+
+.daextlwcnf-button:focus{
+  @include focus-filled;
 }
 
 .daextlwcnf-admin-page-button{
 
-  height: 40px;
+  height: 40px !important;
   padding: 0 16px !important;
   border-radius: $radius-md !important;
 
+  color: $ui-primary-800 !important;
+  border-color: $ui-primary-800 !important;
+  background: $color-style-neutral-50 !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  font-size: $fs-2 !important;
+  margin: 0 !important;
+  font-weight: 400 !important;
+  line-height: 38px !important;
+  box-sizing: border-box !important;
+
   &:hover {
     //background-color: lighten($primary-50, 2%);
-    border-color: $primary-wordpress;
-    color: $primary-wordpress;
+    border-color: $ui-primary-900 !important;
+    color: $ui-primary-900 !important;
+    background: $neutral-grey-150 !important;
+    cursor: pointer !important;
+
   }
   &:focus {
-    //background-color: lighten($primary-50, 2%);
-    outline: $outline;
-    color: $primary-wordpress;
+    @include focus-ring;
   }
 
 }
@@ -49,8 +64,7 @@
   font-size: $fs-2;
   border-radius: 6px;
   text-decoration: none;
-  transition: all 0.2s ease-in-out;
-  transition-property: background, border, box-shadow;
+  transition: background 0.2s ease-in-out, border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   margin: 0;
 }
 
@@ -59,24 +73,32 @@
 }
 
 .daextlwcnf-btn-primary{
-  background: $primary-wordpress-100;
+  background: $ui-primary-600;
   color: $neutral-grey-0;
   border-color: rgba($neutral-branded-800, 0.2);
 }
 
 .daextlwcnf-btn-primary:hover{
-  background: $primary-wordpress-500;
+  background: $ui-primary-700;
   color: $neutral-grey-0;
+}
+
+.daextlwcnf-btn-primary:focus{
+  @include focus-filled;
 }
 
 .daextlwcnf-btn-secondary{
   background: transparent;
-  color: $primary-wordpress-100 !important;
-  border-color: $primary-wordpress-100;
+  color: $ui-primary-700 !important;
+  border-color: $ui-primary-700;
 }
 
 .daextlwcnf-btn-secondary:hover{
   background-color: $neutral-branded-100;
+}
+
+.daextlwcnf-btn-secondary:focus{
+  @include focus-ring;
 }
 
 .daextlwcnf-btn:disabled{
@@ -130,16 +152,19 @@ Ref:
   font-size: $fs-2;
   border-radius: 6px;
   text-decoration: none;
-  transition: all 0.2s ease-in-out;
-  transition-property: background, border, box-shadow;
+  transition: background 0.2s ease-in-out, border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   background: transparent;
-  color: $primary-wordpress-100 !important;
-  border-color: $primary-wordpress-100;
+  color: $ui-primary-700 !important;
+  border-color: $ui-primary-700;
   cursor: pointer;
 }
 
+.custom-file-upload:focus{
+  @include focus-ring;
+}
+
 .custom-file-upload-text{
-  font-size: 14px;
+  font-size: $fs-2;
   line-height: 20px;
   padding: 10px 0;
 }
@@ -160,6 +185,10 @@ select{
   color: $neutral-branded-700 !important;
 }
 
+select:focus{
+  @include focus-ring;
+}
+
 /* Select Element Style - End ----------------------------------------------------------------- */
 
 
@@ -173,7 +202,8 @@ select{
   height: 24px;
 }
 
-.switch input {
+/* The attribute selector gives this rule priority over the width and height of the inputs of the form fields. */
+.switch input[type="checkbox"] {
   opacity: 0;
   width: 0;
   height: 0;
@@ -204,11 +234,11 @@ select{
 }
 
 input:checked + .slider {
-  background-color: $primary-wordpress-100;
+  background-color: $ui-primary-500;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px $primary-branded-100;
+  @include focus-ring;
 }
 
 input:checked + .slider:before {
@@ -312,7 +342,7 @@ p.description{
 
 .daextlwcnf-pill[data-checked="true"]{
   background: $neutral-branded-50;
-  color: $primary-wordpress-100;
+  color: $ui-primary-700;
 }
 
 /* Pills - End ----------------------------------------------------------------- */
@@ -337,7 +367,7 @@ input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   width: 12px;
   height: 12px;
-  background: $primary-wordpress-100;
+  background: $ui-primary-600;
   cursor: pointer;
   border-radius: 6px;
 }
@@ -345,7 +375,7 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]::-moz-range-thumb {
   width: 12px;
   height: 12px;
-  background: $primary-wordpress-100;
+  background: $ui-primary-600;
   cursor: pointer;
   border-radius: 6px;
 }

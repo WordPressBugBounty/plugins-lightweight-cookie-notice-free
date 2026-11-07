@@ -105,6 +105,12 @@ class Daextlwcnf_Admin {
 		// Require and instantiate the classes used to handle the menus.
 		add_action( 'init', array( $this, 'handle_menus' ) );
 
+		// Replace the WordPress admin footer text on the plugin pages.
+		add_filter( 'admin_footer_text', array( $this, 'custom_admin_footer_text' ) );
+
+		// Remove the WordPress version from the admin footer on the plugin pages.
+		add_filter( 'update_footer', array( $this, 'custom_admin_footer_version' ), 11 );
+
 	}
 
 	/**
@@ -552,6 +558,51 @@ class Daextlwcnf_Admin {
 	}
 
 	/**
+	 * Plugin deactivation.
+	 *
+	 * Remove the scheduled deletions of the expired consent log records.
+	 *
+	 * @param bool $networkwide True if the plugin is deactivated for all the sites of the network.
+	 *
+	 * @return void
+	 */
+	public static function dc_deactivate( $networkwide ) {
+
+		$shared = Daextlwcnf_Shared::get_instance();
+
+		if ( function_exists( 'is_multisite' ) && is_multisite() && $networkwide ) {
+
+			// Get the current blog id.
+			global $wpdb;
+			$current_blog = $wpdb->blogid;
+
+			// Create an array with all the blog ids.
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+
+			// Iterate through all the blogs.
+			foreach ( $blogids as $blog_id ) {
+
+				// Switch to the iterated blog.
+				switch_to_blog( $blog_id );
+
+				// Remove the scheduled events of the iterated blog.
+				$shared->unschedule_consent_log_retention();
+
+			}
+
+			// Switch to the current blog.
+			switch_to_blog( $current_blog );
+
+		} else {
+
+			$shared->unschedule_consent_log_retention();
+
+		}
+	}
+
+	/**
 	 * Create the options and tables for the newly created blog.
 	 *
 	 * @param int $blog_id The id of the blog.
@@ -627,6 +678,35 @@ class Daextlwcnf_Admin {
 
 			// Update options version.
 			update_option( 'daextlwcnf_options_version', '2' );
+
+		}
+
+		/**
+		 * Delete the "Consent Log Records" option, no longer used since the records of the "Consent Log" menu are
+		 * paginated on the server.
+		 */
+		if ( intval( get_option( 'daextlwcnf_options_version' ), 10 ) < 3 ) {
+
+			delete_option( 'daextlwcnf_max_displayed_consent_log_records' );
+
+			// Update options version.
+			update_option( 'daextlwcnf_options_version', '3' );
+
+		}
+
+		// Add the options introduced after the options version 3, like the "Consent Log Retention" option.
+		if ( intval( get_option( 'daextlwcnf_options_version' ), 10 ) < 4 ) {
+
+			// assign an instance of Daextlwcnf_Shared.
+			$shared = Daextlwcnf_Shared::get_instance();
+
+			// Note that add_option() doesn't change the options that already exist.
+			foreach ( $shared->get( 'options' ) as $key => $value ) {
+				add_option( $key, $value );
+			}
+
+			// Update options version.
+			update_option( 'daextlwcnf_options_version', '4' );
 
 		}
 	}
@@ -718,6 +798,27 @@ class Daextlwcnf_Admin {
 			update_option( $shared->get( 'slug' ) . '_database_version', '5' );
 
 		}
+
+		// Add the index used to sort and paginate the consent log records by date in the "Consent Log" menu.
+		if ( intval( get_option( $shared->get( 'slug' ) . '_database_version' ), 10 ) < 6 ) {
+
+			$table_name = $wpdb->prefix . $shared->get( 'slug' ) . '_consent_log';
+
+			// phpcs:disable WordPress.DB.DirectDatabaseQuery
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table_name is built from fixed values.
+			$index_exists = null !== $wpdb->get_row( $wpdb->prepare( "SHOW INDEX FROM $table_name WHERE Key_name = %s", 'date' ) );
+
+			if ( ! $index_exists ) {
+				$index_exists = false !== $wpdb->query( "ALTER TABLE $table_name ADD INDEX date (date)" );
+			}
+			// phpcs:enable
+
+			// Update the database version only if the index has been created, so that a failed attempt is repeated.
+			if ( $index_exists ) {
+				update_option( $shared->get( 'slug' ) . '_database_version', '6' );
+			}
+
+		}
 	}
 
 	/**
@@ -794,6 +895,15 @@ class Daextlwcnf_Admin {
 		foreach ( $shared->get( 'options' ) as $key => $value ) {
 			delete_option( $key );
 		}
+
+		// Delete the option used by the DAEXT_Notices_Manager class to persist the notices state.
+		delete_option( $shared->get( 'slug' ) . '_notices_state' );
+
+		// Delete the cached acceptance rates of the categories.
+		$shared->delete_acceptance_rates_cache();
+
+		// Remove the scheduled deletions of the expired consent log records.
+		$shared->unschedule_consent_log_retention();
 	}
 
 	/**
@@ -816,6 +926,67 @@ class Daextlwcnf_Admin {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$wpdb->query( "DROP TABLE {$wpdb->prefix}daextlwcnf_consent_log" );
+	}
+
+	/**
+	 * Determine whether the current screen is one of the plugin's admin pages.
+	 *
+	 * @return bool
+	 */
+	private function is_plugin_admin_page() {
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return false;
+		}
+		return in_array(
+			$screen->id,
+			array(
+				$this->screen_id_consent_log,
+				$this->screen_id_sections,
+				$this->screen_id_categories,
+				$this->screen_id_cookies,
+				$this->screen_id_tools,
+				$this->screen_id_maintenance,
+				$this->screen_id_options,
+			),
+			true
+		);
+	}
+
+	/**
+	 * Replace the admin footer text with a custom message on the plugin pages.
+	 *
+	 * @param string $text The default footer text.
+	 *
+	 * @return string
+	 */
+	public function custom_admin_footer_text( $text ) {
+		if ( ! $this->is_plugin_admin_page() ) {
+			return $text;
+		}
+		return sprintf(
+			/* translators: %s: plugin name link */
+			esc_html__( 'Thank you for using %s', 'lightweight-cookie-notice-free' ),
+			'<a href="https://daext.com/lightweight-cookie-notice/" target="_blank" rel="noopener noreferrer">Lightweight Cookie Notice</a>'
+		);
+	}
+
+	/**
+	 * Remove the WordPress version string from the admin footer on the plugin pages.
+	 *
+	 * @param string $text The default footer version text.
+	 *
+	 * @return string
+	 */
+	public function custom_admin_footer_version( $text ) {
+		if ( ! $this->is_plugin_admin_page() ) {
+			return $text;
+		}
+		return sprintf(
+			/* translators: %s: plugin version */
+			esc_html__( 'Version %s', 'lightweight-cookie-notice-free' ),
+			esc_html( $this->shared->get( 'ver' ) )
+		);
 	}
 
 	/**

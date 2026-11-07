@@ -35,15 +35,6 @@ class Daextlwcnf_Public {
 		// Write in front-end footer.
 		add_action( 'wp_footer', array( $this, 'wr_public_footer' ) );
 
-		// Add the 'cookies' shortcode.
-		add_shortcode( 'cookies', array( $this, 'print_cookie_table_html' ) );
-
-		// Add the 'delete-cookies' shortcode.
-		add_shortcode( 'delete-cookies', array( $this, 'print_delete_cookies_button_html' ) );
-
-		// Add the 'revisit-consent' shortcode.
-		add_shortcode( 'revisit-consent', array( $this, 'print_revisit_consent_button_html' ) );
-
 		/**
 		 * If W3 Total Cache is active and the plugin option "Page Fragment Caching Exception (W3TC)" is enabled the
 		 * "Page Fragment Cache" feature of W3 Total Cache is used and the following operations are performed:

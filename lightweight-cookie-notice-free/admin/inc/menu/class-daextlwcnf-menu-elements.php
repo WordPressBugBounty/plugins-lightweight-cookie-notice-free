@@ -811,7 +811,7 @@ class Daextlwcnf_Menu_Elements {
 					</label>
 				</div>
 				<div class="switch-right">
-					<div><label for="title"><?php echo esc_html( $label ); ?></label></div>
+					<div><label for="<?php echo esc_attr( $name ); ?>"><?php echo esc_html( $label ); ?></label></div>
 				</div>
 			</div>
 			<?php if ( '' !== $description ) : ?>
@@ -955,7 +955,7 @@ class Daextlwcnf_Menu_Elements {
 			</div>
 			<div class="daextlwcnf-admin-toolbar__right-section">
 				<!-- Display the upgrade button in the Free version. -->
-				<?php if ( constant( 'DAEXTLWCN_EDITION' ) === 'FREE' ) : ?>
+				<?php if ( constant( 'DAEXTLWCNF_EDITION' ) === 'FREE' ) : ?>
 				<a href="https://daext.com/lightweight-cookie-notice/" target="_blank" class="daextlwcnf-admin-toolbar__upgrade-button">
 					<?php $this->shared->echo_icon_svg( 'diamond-01' ); ?>
 					<div class="daextlwcnf-admin-toolbar__upgrade-button-text"><?php esc_html_e( 'Unlock Extra Features with LCN Pro', 'lightweight-cookie-notice-free' ); ?></div>
@@ -978,7 +978,7 @@ class Daextlwcnf_Menu_Elements {
 	 */
 	public function display_pro_features() {
 
-		if ( constant( 'DAEXTLWCN_EDITION' ) !== 'FREE' ) {
+		if ( constant( 'DAEXTLWCNF_EDITION' ) !== 'FREE' ) {
 			return;
 		}
 
@@ -1547,6 +1547,9 @@ class Daextlwcnf_Menu_Elements {
 
 		// Display the Header Bar.
 		$this->header_bar();
+
+		// Allow the PluginNoticesManager class to add a notice below the header bar when needed.
+		do_action( 'daextpnm_after_header_bar' );
 
 		// Display the main content of the menu.
 		if ( 'crud' === $this->context ) {

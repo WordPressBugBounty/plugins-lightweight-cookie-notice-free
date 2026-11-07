@@ -17,8 +17,8 @@ function daextlwcnf_print_scripts( $in_footer = false ) {
 		return;
 	}
 
-	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- The sanitization is performed in sanitize_category_state().
-	$category_state_a = sanitize_category_state( wp_unslash( $_COOKIE['daextlwcnf-category-status'] ) );
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- The sanitization is performed in daextlwcnf_sanitize_category_state().
+	$category_state_a = daextlwcnf_sanitize_category_state( wp_unslash( $_COOKIE['daextlwcnf-category-status'] ) );
 
 	if ( $in_footer ) {
 		$position = 'script_body';
@@ -59,7 +59,7 @@ function daextlwcnf_print_scripts( $in_footer = false ) {
  *
  * @return array|bool
  */
-function sanitize_category_state( $category_state ) {
+function daextlwcnf_sanitize_category_state( $category_state ) {
 
 	// Unescape and decode the data provided in json format.
 	$category_state_a = json_decode( $category_state );
