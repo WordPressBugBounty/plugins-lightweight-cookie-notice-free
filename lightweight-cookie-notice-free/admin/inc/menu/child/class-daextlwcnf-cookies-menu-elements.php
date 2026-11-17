@@ -341,7 +341,7 @@ class Daextlwcnf_Cookies_Menu_Elements extends Daextlwcnf_Menu_Elements {
 						'type'        => 'text',
 						'name'        => 'sensitivity',
 						'label'       => __( 'Sensitivity', 'lightweight-cookie-notice-free' ),
-						'description' => __( 'Enter the expiration of the cookie.', 'lightweight-cookie-notice-free' ),
+						'description' => __( 'Enter the sensitivity of the cookie.', 'lightweight-cookie-notice-free' ),
 						'placeholder' => '',
 						'value'       => isset( $item_obj ) ? $item_obj['sensitivity'] : $this->default_values['sensitivity'],
 						'maxlength'   => 255,

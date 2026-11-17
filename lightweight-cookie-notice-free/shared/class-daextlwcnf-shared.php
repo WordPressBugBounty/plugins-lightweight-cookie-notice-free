@@ -39,7 +39,7 @@ class Daextlwcnf_Shared {
 	private function __construct() {
 
 		$this->data['slug'] = 'daextlwcnf';
-		$this->data['ver']  = '1.22';
+		$this->data['ver']  = '1.23';
 		$this->data['dir']  = substr( plugin_dir_path( __FILE__ ), 0, - 7 );
 		$this->data['url']  = substr( plugin_dir_url( __FILE__ ), 0, - 7 );
 
@@ -168,15 +168,20 @@ class Daextlwcnf_Shared {
 			$this->get( 'slug' ) . '_geolocation_service'  => '0',
 			$this->get( 'slug' ) . '_geolocation_behavior' => '0',
 			$this->get( 'slug' ) . '_geolocation_locale'   => array(
+
+				// European Union.
 				'at',
 				'be',
 				'bg',
+				'hr',
 				'cy',
 				'cz',
 				'dk',
 				'ee',
 				'fi',
 				'fr',
+				'de',
+				'gr',
 				'hu',
 				'ie',
 				'it',
@@ -187,11 +192,20 @@ class Daextlwcnf_Shared {
 				'nl',
 				'pl',
 				'pt',
+				'ro',
 				'sk',
 				'si',
 				'es',
 				'se',
+
+				// European Economic Area (non-EU).
+				'is',
+				'li',
+				'no',
+
+				// United Kingdom.
 				'gb',
+
 			),
 			$this->get( 'slug' ) . '_geolocation_subdivision' => array(),
 			$this->get( 'slug' ) . '_maxmind_database_file_path' => '',
@@ -1385,7 +1399,9 @@ class Daextlwcnf_Shared {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		$category_a = $wpdb->get_results(
-			"SELECT * FROM {$wpdb->prefix}daextlwcnf_category ORDER BY section_id, priority ASC",
+			"SELECT c.* FROM {$wpdb->prefix}daextlwcnf_category AS c
+			INNER JOIN {$wpdb->prefix}daextlwcnf_section AS s ON s.section_id = c.section_id
+			ORDER BY s.priority ASC, c.section_id ASC, c.priority ASC",
 			ARRAY_A
 		);
 
@@ -1824,7 +1840,7 @@ class Daextlwcnf_Shared {
 										'text'  => __( 'Disabled', 'lightweight-cookie-notice-free' ),
 									),
 									array(
-										'value' => '3',
+										'value' => '1',
 										'text'  => __( 'Open Cookie Settings', 'lightweight-cookie-notice-free' ),
 									),
 									array(
@@ -3214,10 +3230,6 @@ class Daextlwcnf_Shared {
 									array(
 										'value' => 'security',
 										'text'  => __( 'Security', 'lightweight-cookie-notice-free' ),
-									),
-									array(
-										'value' => 'more-information',
-										'text'  => __( 'More Information', 'lightweight-cookie-notice-free' ),
 									),
 								),
 							),

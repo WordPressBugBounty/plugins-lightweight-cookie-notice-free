@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Lightweight Cookie Notice
  * Description: Generates a lightweight cookie notice. (Lite Version)
- * Version: 1.22
+ * Version: 1.23
  * Author: DAEXT
  * Author URI: https://daext.com
  * Text Domain: lightweight-cookie-notice-free
@@ -101,7 +101,7 @@ if ( is_admin() ) {
 	DAEXT_Notices_Manager::get_instance( [
 		'plugin_slug'        => 'lightweight-cookie-notice-free',
 		'plugin_file'        => __FILE__,
-		'docs_url'           => 'https://daext.com/doc/lightweight-cookie-notice/',
+		'docs_url'           => 'https://daext.com/kb/lightweight-cookie-notice/quick-start-guide/',
 		'review_url'         => 'https://wordpress.org/support/plugin/lightweight-cookie-notice-free/reviews/#new-post',
 		'plugin_prefix'      => 'daextlwcnf',
 		'settings_screen_id' => 'cookie-notice_page_daextlwcnf-options',

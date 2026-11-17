@@ -191,7 +191,6 @@ class Daextlwcnf_Public {
 			'typeText'            => esc_html__( 'Type', 'lightweight-cookie-notice-free' ),
 			'sensitivityText'     => esc_html__( 'Sensitivity', 'lightweight-cookie-notice-free' ),
 			'securityText'        => esc_html__( 'Security', 'lightweight-cookie-notice-free' ),
-			'moreInformationText' => esc_html__( 'More Information', 'lightweight-cookie-notice-free' ),
 			'restUrl' => rest_url(),
 		);
 

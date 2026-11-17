@@ -5,7 +5,7 @@ Donate link: https://daext.com
 Requires at least: 5.0
 Tested up to: 7.1
 Requires PHP: 7.3
-Stable tag: 1.22
+Stable tag: 1.23
 License: GPLv3
 
 This is the free version of Lightweight Cookie Notice, the lightweight and customizable cookie plugin for WordPress.
@@ -29,7 +29,7 @@ This plugin verifies the cookie acceptance with JavaScript. For this reason, all
 ### Geolocation
 Display the cookie notice only to the users located in a custom-defined list of countries with the geolocation feature included in the plugin.
 
-The plugin currently integrates two alternative geolocation services. The instructions to set up these services are available in the [geolocation section](https://daext.com/doc/lightweight-cookie-notice/#geolocation) of the plugin manual.
+The plugin currently integrates two alternative geolocation services. The instructions to set up these services are available in the [geolocation section](https://daext.com/kb/lightweight-cookie-notice/showing-the-notice-only-in-selected-countries/) of the plugin manual.
 
 #### MaxMind GeoLite2
 To enable the [MaxMind GeoLite2](https://dev.maxmind.com/geoip/geoip2/geolite2/) geolocation service, create a [MaxMind](https://www.maxmind.com/) account, download the provided databases, and configure the paths to these files in the plugin settings.
@@ -115,6 +115,18 @@ With this procedure you will be able to perform a **Single Site Activation** in 
 3. Click on the **Activate** button (just below the name of the plugin)
 
 == Changelog ==
+
+= 1.23 =
+
+*November 13, 2026*
+
+* The "Domain" deletion attribute of the cookies defined in the "Cookies" menu is now used when the visitor revisits the consent.
+* Fixed an issue where the "Open Cookie Settings" action of the "Dismiss Button Action" option closed the cookie notice instead of opening the cookie settings.
+* Fixed an issue where the "Accept All Cookies" and "Reject All Cookies" button actions did not always respect the "Active Toggle" option of each category.
+* The sections of the cookie settings window are now sorted by their "Priority" option.
+* The default value of the "Geolocation Locale" option now includes all the countries of the European Union, the European Economic Area, and the United Kingdom.
+* Removed the unused "More Information" value from the "Cookie Table Columns" option.
+* Fixed the descriptions of the "Priority" field of the categories and of the "Sensitivity" field of the cookies.
 
 = 1.22 =
 

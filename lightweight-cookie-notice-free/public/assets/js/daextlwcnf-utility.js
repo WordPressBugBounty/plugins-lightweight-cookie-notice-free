@@ -89,7 +89,7 @@ window.daextlwcnUtility = {
    *
    * @param name The name of the cookie
    */
-  deleteCookie: function(name, cookiePathAttribute) {
+  deleteCookie: function(name, cookieDomainAttribute, cookiePathAttribute) {
 
     'use strict';
 
@@ -98,6 +98,9 @@ window.daextlwcnUtility = {
      * options.
      */
     let cookieProperty = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT';
+    if(cookieDomainAttribute !== ''){
+      cookieProperty += '; domain=' + cookieDomainAttribute;
+    }
     if(cookiePathAttribute !== ''){
       cookieProperty += '; path=' + cookiePathAttribute;
     }
@@ -451,13 +454,19 @@ window.daextlwcnUtility = {
 
     let sections = settings.sections;
 
-    let category = sections.find(function(section){
-      return section.category_a.find(function(category){
-        return category.category_id === categoryId;
-      });
-    });
+    for (let i = 0; i < sections.length; i++) {
 
-    return category.category_a[0].toggle === "1";
+      let category = sections[i].category_a.find(function(singleCategory){
+        return singleCategory.category_id === categoryId;
+      });
+
+      if (typeof category !== 'undefined') {
+        return category.toggle === "1";
+      }
+
+    }
+
+    return false;
 
   },
 

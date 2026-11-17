@@ -323,7 +323,7 @@ class Daextlwcnf_Categories_Menu_Elements extends Daextlwcnf_Menu_Elements {
 						'type'        => 'input_range',
 						'name'        => 'priority',
 						'label'       => __( 'Priority', 'lightweight-cookie-notice-free' ),
-						'description' => __( 'The priority value determines the order used to display the sections.', 'lightweight-cookie-notice-free' ),
+						'description' => __( 'The priority value determines the order used to display the categories.', 'lightweight-cookie-notice-free' ),
 						'value'       => isset( $item_obj ) ? $item_obj['priority'] : $this->default_values['priority'],
 						'min'         => 0,
 						'max'         => 100,

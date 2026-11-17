@@ -1098,10 +1098,10 @@ class Daextlwcnf_Admin {
 
 		add_submenu_page(
 			$this->shared->get( 'slug' ) . '-consent-log',
-			esc_html__( 'Help & Support', 'lightweight-cookie-notice-free' ),
-			esc_html__( 'Help & Support', 'lightweight-cookie-notice-free' ) . '<i class="dashicons dashicons-external" style="font-size:12px;vertical-align:-2px;height:10px;"></i>',
+			esc_html__( 'Documentation', 'lightweight-cookie-notice-free' ),
+			esc_html__( 'Documentation', 'lightweight-cookie-notice-free' ) . '<i class="dashicons dashicons-external" style="font-size:12px;vertical-align:-2px;height:10px;"></i>',
 			'manage_options',
-			'https://daext.com/doc/lightweight-cookie-notice/',
+			'https://daext.com/kb/lightweight-cookie-notice/',
 		);
 	}
 

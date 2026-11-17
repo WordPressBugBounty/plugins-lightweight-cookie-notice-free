@@ -172,19 +172,20 @@ window.daextlwcnRevisitCookieConsent = (function(utility) {
   function handleRevisitConsentClick(){
 
     //Delete the cookie used to keep the acceptance status
-    utility.deleteCookie('daextlwcnf-accepted', settings.cookiePathAttribute);
+    utility.deleteCookie('daextlwcnf-accepted', '', settings.cookiePathAttribute);
 
     //Delete the cookie used to store the status of the categories
-    utility.deleteCookie('daextlwcnf-category-status', settings.cookiePathAttribute);
+    utility.deleteCookie('daextlwcnf-category-status', '', settings.cookiePathAttribute);
 
     //Delete the cookie used to store the encrypted key.
-    utility.deleteCookie('daextlwcnf-encrypted-key', settings.cookiePathAttribute);
+    utility.deleteCookie('daextlwcnf-encrypted-key', '', settings.cookiePathAttribute);
 
     //Delete all the cookies defined in the "Cookies" menu
     if(settings.cookies !== null && settings.cookies.length > 0){
       settings.cookies.forEach((cookie) => {
+        const cookieDomainAttribute = null !== cookie.cookie_domain_attribute && cookie.cookie_domain_attribute.length > 0 ? cookie.cookie_domain_attribute : '';
         const cookiePathAttribute = null !== cookie.cookie_path_attribute && cookie.cookie_path_attribute.length > 0 ? cookie.cookie_path_attribute : '/';
-        utility.deleteCookie(cookie.name, cookiePathAttribute);
+        utility.deleteCookie(cookie.name, cookieDomainAttribute, cookiePathAttribute);
       });
     }
 
